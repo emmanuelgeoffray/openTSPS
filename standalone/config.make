@@ -3,14 +3,17 @@
 # OF_ROOT allows to move projects outside apps/* just set this variable to the
 # absoulte path to the OF root folder
 
-OF_ROOT = ../../../..
+OF_ROOT = ../../..
 
 
 # USER_CFLAGS allows to pass custom flags to the compiler
 # for example search paths like:
 # USER_CFLAGS = -I src/objects
 
-USER_CFLAGS =  
+USER_CFLAGS = -w -I/usr/include/libusb-1.0/ -Iaddons/ofxOpenCVExtensions/src/ -Iaddons/ofxCvHaarTracker/src -Iaddons/ofxFileDialog/src/ -Iaddons/ofxKinect/src/ -Iaddons/ofxKinect/libs/libfreenect -Iaddons/ofxLabGui/src/ -Iaddons/ofxLabGui/src/elements -Iaddons/ofxMSAInteractiveObject/src/ -Iaddons/ofxTSPS/src/ -Iaddons/ofxTSPS/src/communication -Iaddons/ofxTSPS/src/gui -Iaddons/ofxTSPS/src/utils -Iaddons/ofxTuioWrapper/src/ -Iaddons/ofxTuioWrapper/src/core -Iaddons/ofxWebUI_LAB/src/ -Iaddons/ofxWebUI_LAB/libs/b64/include -Iaddons/ofxWebUI_LAB/libs/b64/src -Iaddons/ofxWebUI_LAB/libs/libwebsockets/include -Iaddons/ofxWebUI_LAB/libs/protobuf/include/google/protobuf
+
+
+
 
 
 # USER_LDFLAGS allows to pass custom flags to the linker
