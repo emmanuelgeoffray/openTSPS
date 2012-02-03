@@ -31,6 +31,7 @@ void ofxTSPSPeopleTracker::setup(int w, int h)
 	colorImageWarped.allocate(width,height);
 	grayBg.allocate(width, height);
 	grayDiff.allocate(width, height);
+	canny.allocate(width, height);
 	floatBgImg.allocate(width, height);
 	graySmallImage.allocate( width*TRACKING_SCALE_FACTOR, height*TRACKING_SCALE_FACTOR );	
 	grayLastImage.allocate( width*TRACKING_SCALE_FACTOR, height*TRACKING_SCALE_FACTOR );
@@ -44,6 +45,10 @@ void ofxTSPSPeopleTracker::setup(int w, int h)
 	//set tracker
 	bOscEnabled = bTuioEnabled = bTcpEnabled = bWebSocketsEnabled = false;
 	p_Settings = ofxTSPSSettings::getInstance();
+
+  //set up canny
+  lines = 0;
+  storage = cvCreateMemStorage(0);
 	
 	//gui.loadFromXML();	
 	//gui.setDraw(true);		
@@ -83,6 +88,7 @@ void ofxTSPSPeopleTracker::setup(int w, int h)
 	processedView.setTitle("Differenced View", "Differencing");
 	processedView.setColor(113,171,154);
 	
+	dataView.setImage(grayImageWarped);
 	dataView.setTitle("Data View", "Data");
 	dataView.setColor(191,120,0);
 	
@@ -307,129 +313,150 @@ void ofxTSPSPeopleTracker::trackPeople()
 	//-----------------------
 	// TRACKING
 	//-----------------------	
-	//find the optical flow
-	if (p_Settings->bTrackOpticalFlow){
-		opticalFlow.calc(grayLastImage, graySmallImage, 11);
-	}
-	
-	//accumulate and store all found haar features.
-	vector<ofRectangle> haarRects;
-	if(p_Settings->bDetectHaar){
-		haarTracker.findHaarObjects( grayBabyImage );
-		float x, y, w, h;
-		while(haarTracker.hasNextHaarItem()){
-			haarTracker.getHaarItemPropertiesEased( &x, &y, &w, &h );
-			haarRects.push_back( ofRectangle(x,y,w,h) );
-		}
-	}
-	
-	char pringString[1024];
-	sprintf(pringString, "found %i haar items this frame", haarRects.size());
-	ofLog(OF_LOG_VERBOSE, pringString);
-	
-	contourFinder.findContours(grayDiff, p_Settings->minBlob*width*height, p_Settings->maxBlob*width*height, 50, p_Settings->bFindHoles);
-	persistentTracker.trackBlobs(contourFinder.blobs);
-		
-	// By setting maxVector and minVector outside the following for-loop, blobs do NOT have to be detected first
-	//            before optical flow can begin working.
-	if(p_Settings->bTrackOpticalFlow) {
-        scene.averageMotion = opticalFlow.flowInRegion(0,0,width,height);
-        scene.percentCovered = 0; 
-        opticalFlow.maxVector = p_Settings->maxOpticalFlow;
-		opticalFlow.minVector = p_Settings->minOpticalFlow;
-	}
-	
-	for(int i = 0; i < persistentTracker.blobs.size(); i++){
-		ofxCvTrackedBlob blob = persistentTracker.blobs[i];
-		ofxTSPSPerson* p = getTrackedPerson(blob.id);
-		//somehow we are not tracking this person, safeguard (shouldn't happen)
-		if(NULL == p){
-			ofLog(OF_LOG_WARNING, "ofxPerson::warning. encountered persistent blob without a person behind them\n");
-			continue;
-		}
-		
-		scene.percentCovered += blob.area;
-		
-		//update this person with new blob info
-		p->update(blob, p_Settings->bCentroidDampen);
+	if (p_Settings->bTrackBlobs){
+    //find the optical flow
+    if (p_Settings->bTrackOpticalFlow){
+      opticalFlow.calc(grayLastImage, graySmallImage, 11);
+    }
+    
+    //accumulate and store all found haar features.
+    vector<ofRectangle> haarRects;
+    if(p_Settings->bDetectHaar){
+      haarTracker.findHaarObjects( grayBabyImage );
+      float x, y, w, h;
+      while(haarTracker.hasNextHaarItem()){
+        haarTracker.getHaarItemPropertiesEased( &x, &y, &w, &h );
+        haarRects.push_back( ofRectangle(x,y,w,h) );
+      }
+    }
+    
+    char pringString[1024];
+    sprintf(pringString, "found %i haar items this frame", haarRects.size());
+    ofLog(OF_LOG_VERBOSE, pringString);
+    
+    contourFinder.findContours(grayDiff, p_Settings->minBlob*width*height, p_Settings->maxBlob*width*height, 50, p_Settings->bFindHoles);
+    persistentTracker.trackBlobs(contourFinder.blobs);
+      
+    // By setting maxVector and minVector outside the following for-loop, blobs do NOT have to be detected first
+    //            before optical flow can begin working.
+    if(p_Settings->bTrackOpticalFlow) {
+          scene.averageMotion = opticalFlow.flowInRegion(0,0,width,height);
+          scene.percentCovered = 0; 
+          opticalFlow.maxVector = p_Settings->maxOpticalFlow;
+      opticalFlow.minVector = p_Settings->minOpticalFlow;
+    }
+    
+    for(int i = 0; i < persistentTracker.blobs.size(); i++){
+      ofxCvTrackedBlob blob = persistentTracker.blobs[i];
+      ofxTSPSPerson* p = getTrackedPerson(blob.id);
+      //somehow we are not tracking this person, safeguard (shouldn't happen)
+      if(NULL == p){
+        ofLog(OF_LOG_WARNING, "ofxPerson::warning. encountered persistent blob without a person behind them\n");
+        continue;
+      }
+      
+      scene.percentCovered += blob.area;
+      
+      //update this person with new blob info
+      p->update(blob, p_Settings->bCentroidDampen);
 
-		//normalize simple contour
-		for (int i=0; i<p->simpleContour.size(); i++){
-			p->simpleContour[i].x /= width;
-			p->simpleContour[i].y /= height;
-		}
-        
-		ofRectangle roi;
-		roi.x		= fmax( (p->boundingRect.x - p_Settings->haarAreaPadding) * TRACKING_SCALE_FACTOR, 0.0f );
-		roi.y		= fmax( (p->boundingRect.y - p_Settings->haarAreaPadding) * TRACKING_SCALE_FACTOR, 0.0f );
-		roi.width	= fmin( (p->boundingRect.width  + p_Settings->haarAreaPadding*2) * TRACKING_SCALE_FACTOR, grayBabyImage.width - roi.x );
-		roi.height	= fmin( (p->boundingRect.height + p_Settings->haarAreaPadding*2) * TRACKING_SCALE_FACTOR, grayBabyImage.width - roi.y );	
-		
-		//sum optical flow for the person
-		if(p_Settings->bTrackOpticalFlow){
-			p->opticalFlowVectorAccumulation = opticalFlow.flowInRegion(roi);
-		}
-		
-		//detect haar patterns (faces, eyes, etc)
-		if (p_Settings->bDetectHaar){
-			bool bHaarItemSet = false;
-				
-			//find the region of interest, expanded by haarArea.
-			//bound by the frame edge
-			//cout << "ROI is " << roi.x << "  " << roi.y << " " << roi.width << "  " << roi.height << endl;
-			bool haarThisFrame = false;
-			for(int i = 0; i < haarRects.size(); i++){
-				ofRectangle hr = haarRects[i];
-				//check to see if the haar is contained within the bounding rectangle
-				if(hr.x > roi.x && hr.y > roi.y && hr.x+hr.width < roi.x+roi.width && hr.y+hr.height < roi.y+roi.height){
-					hr.x /= TRACKING_SCALE_FACTOR;
-					hr.y /= TRACKING_SCALE_FACTOR;
-					hr.width /= TRACKING_SCALE_FACTOR;
-					hr.height /= TRACKING_SCALE_FACTOR;
-					p->setHaarRect(hr);
-					haarThisFrame = true;
-					break;
-				}
-			}
-			if(!haarThisFrame){
-				p->noHaarThisFrame();
-			}
-			/*
-			 //JG 1/28/2010
-			 //This is the prper way to do the Haar, checking one person at a time.
-			 //however this discards the robustness of the haarFinder and 
-			 //makes the whole operation really spotty.  
-			 // The solution is to put more energy into finding out how 
-			 // the haar tracker works to get robust/persistent haar items over time.
-			 //for now we just check the whole screen and see if the haar is contained
-			grayBabyImage.setROI(roi.x, roi.y, roi.width, roi.height);
-			int numFound = haarFinder.findHaarObjects(grayBabyImage, roi);
-			//cout << "found " << numFound << " for this object" << endl;
-			if(numFound > 0) {
-				ofRectangle haarRect = haarFinder.blobs[0].boundingRect;
-				haarRect.x /= TRACKING_SCALE_FACTOR;
-				haarRect.y /= TRACKING_SCALE_FACTOR;
-				haarRect.width /= TRACKING_SCALE_FACTOR;
-				haarRect.height /= TRACKING_SCALE_FACTOR;
-				p->setHaarRect(haarRect);
-			}
-			else {
-				p->noHaarThisFrame();
-			}
-			 */
-		}
-		
-		if(eventListener != NULL){
-			if( p->velocity.x != 0 || p->velocity.y != 0){
-				eventListener->personMoved(p, &scene);
-			}
-			eventListener->personUpdated(p, &scene);
-		}
-	}
-	
-	//normalize it
-	scene.percentCovered /= width*height;
-	
+      //normalize simple contour
+      for (int i=0; i<p->simpleContour.size(); i++){
+        p->simpleContour[i].x /= width;
+        p->simpleContour[i].y /= height;
+      }
+          
+      ofRectangle roi;
+      roi.x		= fmax( (p->boundingRect.x - p_Settings->haarAreaPadding) * TRACKING_SCALE_FACTOR, 0.0f );
+      roi.y		= fmax( (p->boundingRect.y - p_Settings->haarAreaPadding) * TRACKING_SCALE_FACTOR, 0.0f );
+      roi.width	= fmin( (p->boundingRect.width  + p_Settings->haarAreaPadding*2) * TRACKING_SCALE_FACTOR, grayBabyImage.width - roi.x );
+      roi.height	= fmin( (p->boundingRect.height + p_Settings->haarAreaPadding*2) * TRACKING_SCALE_FACTOR, grayBabyImage.width - roi.y );	
+      
+      //sum optical flow for the person
+      if(p_Settings->bTrackOpticalFlow){
+        p->opticalFlowVectorAccumulation = opticalFlow.flowInRegion(roi);
+      }
+      
+      //detect haar patterns (faces, eyes, etc)
+      if (p_Settings->bDetectHaar){
+        bool bHaarItemSet = false;
+          
+        //find the region of interest, expanded by haarArea.
+        //bound by the frame edge
+        //cout << "ROI is " << roi.x << "  " << roi.y << " " << roi.width << "  " << roi.height << endl;
+        bool haarThisFrame = false;
+        for(int i = 0; i < haarRects.size(); i++){
+          ofRectangle hr = haarRects[i];
+          //check to see if the haar is contained within the bounding rectangle
+          if(hr.x > roi.x && hr.y > roi.y && hr.x+hr.width < roi.x+roi.width && hr.y+hr.height < roi.y+roi.height){
+            hr.x /= TRACKING_SCALE_FACTOR;
+            hr.y /= TRACKING_SCALE_FACTOR;
+            hr.width /= TRACKING_SCALE_FACTOR;
+            hr.height /= TRACKING_SCALE_FACTOR;
+            p->setHaarRect(hr);
+            haarThisFrame = true;
+            break;
+          }
+        }
+        if(!haarThisFrame){
+          p->noHaarThisFrame();
+        }
+        /*
+         //JG 1/28/2010
+         //This is the prper way to do the Haar, checking one person at a time.
+         //however this discards the robustness of the haarFinder and 
+         //makes the whole operation really spotty.  
+         // The solution is to put more energy into finding out how 
+         // the haar tracker works to get robust/persistent haar items over time.
+         //for now we just check the whole screen and see if the haar is contained
+        grayBabyImage.setROI(roi.x, roi.y, roi.width, roi.height);
+        int numFound = haarFinder.findHaarObjects(grayBabyImage, roi);
+        //cout << "found " << numFound << " for this object" << endl;
+        if(numFound > 0) {
+          ofRectangle haarRect = haarFinder.blobs[0].boundingRect;
+          haarRect.x /= TRACKING_SCALE_FACTOR;
+          haarRect.y /= TRACKING_SCALE_FACTOR;
+          haarRect.width /= TRACKING_SCALE_FACTOR;
+          haarRect.height /= TRACKING_SCALE_FACTOR;
+          p->setHaarRect(haarRect);
+        }
+        else {
+          p->noHaarThisFrame();
+        }
+         */
+      }
+      
+      if(eventListener != NULL){
+        if( p->velocity.x != 0 || p->velocity.y != 0){
+          eventListener->personMoved(p, &scene);
+        }
+        eventListener->personUpdated(p, &scene);
+      }
+    }
+    
+    //normalize it
+    scene.percentCovered /= width*height;
+  }
+
+  //TRACK FISHES
+	if (p_Settings->bTrackArms){
+    //DETECT LINES WITH HOUGH TRANSFORM
+    cvCanny(grayDiff.getCvImage(), canny.getCvImage(), 70, 200 );
+    lines = cvHoughLines2(canny.getCvImage(), storage, CV_HOUGH_STANDARD, 1, CV_PI/180, p_Settings->minArm*width*height);
+    float totalAngles = 0;
+    float totalCos = 0;
+    float totalSin = 0;
+    for( int i = 0; i < MIN(lines->total,10000); i++ ) {
+      float* line = (float*)cvGetSeqElem(lines,i);
+      float theta = line[1];
+      totalSin += sin(theta);
+      totalCos += cos(theta);
+    }
+    totalSin/= MIN(lines->total,10000);
+    totalCos/= MIN(lines->total,10000);
+    totalTheta = atan2(totalSin,totalCos);
+    cout << "Total Theta: " << totalTheta << endl;
+  }
 	//-----------------------
 	// VIEWS
 	//-----------------------	
@@ -446,7 +473,11 @@ void ofxTSPSPeopleTracker::trackPeople()
 		adjustedView.update(grayImageWarped);
 	bgView.update(grayBg);
 	processedView.update(grayDiff);
-    
+  if (p_Settings->bAdjustedViewInColor)
+		dataView.update(colorImageWarped);
+	else
+		dataView.update(grayImageWarped);
+	  
 	//-----------------------
 	// COMMUNICATION
 	//-----------------------	
@@ -629,11 +660,11 @@ void ofxTSPSPeopleTracker::draw(int x, int y, int mode)
 		} else if ( activeViewIndex == PROCESSED_VIEW){ 
 			processedView.drawLarge(activeView.x, activeView.y, activeView.width, activeView.height);
 		} else if ( activeViewIndex == DATA_VIEW ){
+			dataView.drawLarge(activeView.x, activeView.y, activeView.width, activeView.height);
 			ofPushMatrix();
 				ofTranslate(activeView.x, activeView.y);
 				drawBlobs(activeView.width, activeView.height);
 			ofPopMatrix();
-			dataView.drawLarge(activeView.x, activeView.y, activeView.width, activeView.height);
 		}
 		
 		//draw all images small
@@ -667,112 +698,135 @@ void ofxTSPSPeopleTracker::draw(int x, int y, int mode)
 
 //---------------------------------------------------------------------------
 void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
+	if (p_Settings->bTrackBlobs){
 	
-	float scaleVar = (float) drawWidth/width;
-	
-	ofFill();
-	ofSetHexColor(0x333333);
-	ofRect(0,0,drawWidth,drawHeight);
-	ofSetHexColor(0xffffff);
-	
-	ofNoFill();
-	
-	if (p_Settings->bTrackOpticalFlow){
-		ofSetColor(34,151,210);
-		opticalFlow.draw(drawWidth,drawHeight);
-	}					
-	
-	ofPushMatrix();
-	ofScale(scaleVar, scaleVar);
-	
-	// simpler way to draw contours: contourFinder.draw();
-	
-	for (int i=0; i < trackedPeople.size(); i++){
-		
-		//draw blobs				
-		//if haarfinder is looking at these blobs, draw the area it's looking at
-		ofxTSPSPerson* p = trackedPeople[i];
-		
-		//draw contours 
-		ofPushStyle();
-		ofNoFill();
-		if (p_Settings->bSendOscContours){
-			ofSetHexColor(0x3abb93);
-		} else {
-			ofSetHexColor(0xc4b68e);
-		}
-		ofBeginShape();
-		for( int j=0; j<p->contour.size(); j++ ) {
-			ofVertex( p->contour[j].x, p->contour[j].y );
-		}
-		ofEndShape();
-		ofPopStyle();
-		
-		if(p_Settings->bTrackOpticalFlow){
-			//purple optical flow arrow
-			ofSetHexColor(0xff00ff);
-			//JG Doesn't really provide any helpful information since its so scattered
-//			ofLine(p->centroid.x, 
-//				   p->centroid.y, 
-//				   p->centroid.x + p->opticalFlowVectorAccumulation.x, 
-//				   p->centroid.y + p->opticalFlowVectorAccumulation.y);
-		}
-		
-		ofSetHexColor(0xffffff);							
-		if(p_Settings->bDetectHaar){
-			ofSetHexColor(0xee3523);
-			//draw haar search area expanded 
-			//limit to within data box so it's not confusing
-			/*ofRect(p->boundingRect.x - p_Settings->haarAreaPadding, 
-				   p->boundingRect.y - p_Settings->haarAreaPadding, 
-				   p->boundingRect.width  + p_Settings->haarAreaPadding*2, 
-				   p->boundingRect.height + p_Settings->haarAreaPadding*2);*/
-				
-				ofRectangle haarRect = ofRectangle(p->boundingRect.x - p_Settings->haarAreaPadding, 
-												   p->boundingRect.y - p_Settings->haarAreaPadding, 
-												   p->boundingRect.width  + p_Settings->haarAreaPadding*2, 
-												   p->boundingRect.height + p_Settings->haarAreaPadding*2);
-				if (haarRect.x < 0){
-					haarRect.width += haarRect.x;
-					haarRect.x = 0;					
-				}
-				if (haarRect.y < 0){
-					haarRect.height += haarRect.y;	
-					haarRect.y = 0;
-				}
-				if (haarRect.x + haarRect.width > width) haarRect.width = width-haarRect.x;
-				if (haarRect.y + haarRect.height > height) haarRect.height = height-haarRect.y;
-				ofRect(haarRect.x, haarRect.y, haarRect.width, haarRect.height);
-		}
-		
-		if(p->hasHaarRect()){
-			//draw the haar rect
-			ofSetHexColor(0xee3523);
-			ofRect(p->getHaarRect().x, p->getHaarRect().y, p->getHaarRect().width, p->getHaarRect().height);
-			//haar-detected people get a red square
-			ofSetHexColor(0xfd5f4f);
-		}
-		else {
-			//no haar gets a yellow square
-			ofSetHexColor(0xeeda00);
-		}
-		
-		//draw person
-		ofRect(p->boundingRect.x, p->boundingRect.y, p->boundingRect.width, p->boundingRect.height);
-		
-		//draw centroid
-		ofSetHexColor(0xff0000);
-		ofCircle(p->centroid.x, p->centroid.y, 3);
-		
-		//draw id
-		ofSetHexColor(0xffffff);
-		char idstr[1024];
-		sprintf(idstr, "pid: %d\noid: %d\nage: %d", p->pid, p->oid, p->age );
-		ofDrawBitmapString(idstr, p->centroid.x+8, p->centroid.y);													
-	}
-	ofPopMatrix();
-	ofSetHexColor(0xffffff);				
-	//ofDrawBitmapString("blobs and optical flow", 5, height - 5 );
+    float scaleVar = (float) drawWidth/width;
+    /*
+    ofFill();
+    ofSetHexColor(0x333333);
+    ofRect(0,0,drawWidth,drawHeight);
+    ofSetHexColor(0xffffff);
+    */
+    ofNoFill();
+    
+    if (p_Settings->bTrackOpticalFlow){
+      ofSetColor(34,151,210);
+      opticalFlow.draw(drawWidth,drawHeight);
+    }					
+    
+    ofPushMatrix();
+    ofScale(scaleVar, scaleVar);
+    
+    // simpler way to draw contours: contourFinder.draw();
+    
+    for (int i=0; i < trackedPeople.size(); i++){
+      
+      //draw blobs				
+      //if haarfinder is looking at these blobs, draw the area it's looking at
+      ofxTSPSPerson* p = trackedPeople[i];
+      
+      //draw contours 
+      ofPushStyle();
+      ofNoFill();
+      if (p_Settings->bSendOscContours){
+        ofSetHexColor(0x3abb93);
+      } else {
+        ofSetHexColor(0xc4b68e);
+      }
+      ofBeginShape();
+      for( int j=0; j<p->contour.size(); j++ ) {
+        ofVertex( p->contour[j].x, p->contour[j].y );
+      }
+      ofEndShape();
+      ofPopStyle();
+      
+      if(p_Settings->bTrackOpticalFlow){
+        //purple optical flow arrow
+        ofSetHexColor(0xff00ff);
+        //JG Doesn't really provide any helpful information since its so scattered
+  //			ofLine(p->centroid.x, 
+  //				   p->centroid.y, 
+  //				   p->centroid.x + p->opticalFlowVectorAccumulation.x, 
+  //				   p->centroid.y + p->opticalFlowVectorAccumulation.y);
+      }
+      
+      ofSetHexColor(0xffffff);							
+      if(p_Settings->bDetectHaar){
+        ofSetHexColor(0xee3523);
+        //draw haar search area expanded 
+        //limit to within data box so it's not confusing
+        /*ofRect(p->boundingRect.x - p_Settings->haarAreaPadding, 
+             p->boundingRect.y - p_Settings->haarAreaPadding, 
+             p->boundingRect.width  + p_Settings->haarAreaPadding*2, 
+             p->boundingRect.height + p_Settings->haarAreaPadding*2);*/
+          
+          ofRectangle haarRect = ofRectangle(p->boundingRect.x - p_Settings->haarAreaPadding, 
+                             p->boundingRect.y - p_Settings->haarAreaPadding, 
+                             p->boundingRect.width  + p_Settings->haarAreaPadding*2, 
+                             p->boundingRect.height + p_Settings->haarAreaPadding*2);
+          if (haarRect.x < 0){
+            haarRect.width += haarRect.x;
+            haarRect.x = 0;					
+          }
+          if (haarRect.y < 0){
+            haarRect.height += haarRect.y;	
+            haarRect.y = 0;
+          }
+          if (haarRect.x + haarRect.width > width) haarRect.width = width-haarRect.x;
+          if (haarRect.y + haarRect.height > height) haarRect.height = height-haarRect.y;
+          ofRect(haarRect.x, haarRect.y, haarRect.width, haarRect.height);
+      }
+      
+      if(p->hasHaarRect()){
+        //draw the haar rect
+        ofSetHexColor(0xee3523);
+        ofRect(p->getHaarRect().x, p->getHaarRect().y, p->getHaarRect().width, p->getHaarRect().height);
+        //haar-detected people get a red square
+        ofSetHexColor(0xfd5f4f);
+      }
+      else {
+        //no haar gets a yellow square
+        ofSetHexColor(0xeeda00);
+      }
+      
+      //draw person
+      ofRect(p->boundingRect.x, p->boundingRect.y, p->boundingRect.width, p->boundingRect.height);
+      
+      //draw centroid
+      ofSetHexColor(0xff0000);
+      ofCircle(p->centroid.x, p->centroid.y, 3);
+      
+      //draw id
+      ofSetHexColor(0xffffff);
+      char idstr[1024];
+      sprintf(idstr, "pid: %d\noid: %d\nage: %d", p->pid, p->oid, p->age );
+      ofDrawBitmapString(idstr, p->centroid.x+8, p->centroid.y);													
+    }
+    ofPopMatrix();
+    ofSetHexColor(0xffffff);				
+    //ofDrawBitmapString("blobs and optical flow", 5, height - 5 );
+  }
+	if (p_Settings->bTrackBlobs){
+    float scaleVar = (float) drawWidth/width;
+    ofPushMatrix();
+    ofScale(scaleVar, scaleVar);
+    ofSetColor(34,151,210);
+    for( int i = 0; i < MIN(lines->total,10000); i++ ) {
+      float* line = (float*)cvGetSeqElem(lines,i);
+      float rho = line[0];
+      float theta = line[1];
+      CvPoint pt1, pt2;
+      double a = cos(theta), b = sin(theta);
+      double x0 = a*rho, y0 = b*rho;
+      pt1.x = cvRound(x0 + 1000*(-b));
+      pt1.y = cvRound(y0 + 1000*(a));
+      pt2.x = cvRound(x0 - 1000*(-b));
+      pt2.y = cvRound(y0 - 1000*(a));
+      ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
+    } 
+    ofPopMatrix();
+    ofSetHexColor(0xffffff);				
+  }
 }
 
 //---------------------------------------------------------------------------

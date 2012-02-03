@@ -43,6 +43,7 @@ ofxTSPSSettings* ofxTSPSSettings::getInstance()
 		single->smooth = 0; 
 		
 		single->bAmplify = single->bSmooth = single->bHighpass = false;
+		single->bTrackBlobs = true;
 		single->bFindHoles = true;
 		
 		single->minBlob = 0.001;

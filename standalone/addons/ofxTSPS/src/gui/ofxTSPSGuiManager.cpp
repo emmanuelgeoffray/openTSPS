@@ -120,6 +120,11 @@ void ofxTSPSGuiManager::setup(){
 	sensingPanel->setBackgroundColor(191,120,0);
 	sensingPanel->setBackgroundSelectColor(191,120,0);
 	
+	guiTypePanel * fishesPanel = panel.addPanel("fishes", 1, false);
+	fishesPanel->setDrawLock( false );
+	fishesPanel->setBackgroundColor(34,151,210);
+	fishesPanel->setBackgroundSelectColor(34,151,210);
+	
 	guiTypePanel * communicationPanel = panel.addPanel("communication", 1, false);
 	communicationPanel->setDrawLock( false );
 	communicationPanel->setBackgroundColor(180,87,128);
@@ -223,9 +228,10 @@ void ofxTSPSGuiManager::setup(){
 	blobGroup->setBackgroundSelectColor(148,129,85);
 	blobGroup->seBaseColor(238,218,0);
 	blobGroup->setShowText(false);
-	blobGroup->setActive(true);
+	//blobGroup->setActive(true);
 	
 	//JG 12/8/09 GUI-REDUX Removing this feature
+	panel.addToggle("track blobs", "TRACK_BLOBS", true);
 	panel.addSlider("minimum blob size (% of view):", "MIN_BLOB", 1.f, 0.01f, 2.0f, false);
 	panel.addSlider("maximum blob size (% of view):", "MAX_BLOB", .50f, 0.1f, 100.f, false);
 	panel.addToggle("ignore nested blobs", "FIND_HOLES", false);
@@ -269,6 +275,62 @@ void ofxTSPSGuiManager::setup(){
 	//	panel.addSlider("min. checkable haar size (%)", "MIN_HAAR", .1f, 0.0001f, 1.0f, false);
 	//	panel.addSlider("max. checkable haar size (%)", "MAX_HAAR", .5f, 0.0001f, 1.0f, false);
 	
+
+	//sensing
+	
+	panel.setWhichPanel("fishes");
+	
+	guiTypeGroup * generalGroup = panel.addGroup("generaloptions");
+	generalGroup->setBackgroundColor(148,129,85);
+	generalGroup->setBackgroundSelectColor(148,129,85);
+	generalGroup->seBaseColor(238,218,0);
+	generalGroup->setShowText(false);
+	
+	//JG 12/8/09 GUI-REDUX Removing this feature
+	panel.addToggle("track arms", "TRACK_ARMS", true);
+	panel.addSlider("minimum arm size (% of view):", "MIN_ARM", 1.f, 0.01f, 2.0f, false);
+	panel.addSlider("maximum arm size (% of view):", "MAX_ARM", .50f, 0.1f, 100.f, false);
+	//panel.addToggle("ignore nested blobs", "FIND_HOLES", false);
+/*	
+	guiTypeGroup * optionsGroup = panel.addGroup("options");
+	optionsGroup->setBackgroundColor(148,129,85);
+	optionsGroup->setBackgroundSelectColor(148,129,85);
+	optionsGroup->seBaseColor(58,187,147);
+	optionsGroup->setShowText(false);
+	panel.addToggle("track and send contours", "SEND_OSC_CONTOURS", false);
+	
+	guiTypeGroup * opticalGroup = panel.addGroup("optical flow");
+	opticalGroup->setBackgroundColor(148,129,85);
+	opticalGroup->setBackgroundSelectColor(148,129,85);
+	opticalGroup->seBaseColor(34,151,210);
+	opticalGroup->setShowText(false);
+	//optical flow
+	panel.addToggle("track and send optical flow in blobs", "SENSE_OPTICAL_FLOW", true);
+	panel.addSlider("filter vectors smaller than:", "MIN_OPTICAL_FLOW", 0, 0, 5.0, false);
+	panel.addSlider("clamp vectors: larger than", "MAX_OPTICAL_FLOW", 10, 5.0, 200, false);
+	
+	guiTypeGroup * haarGroup = panel.addGroup("haar tracking");
+	haarGroup->setBackgroundColor(148,129,85);
+	haarGroup->setBackgroundSelectColor(148,129,85);
+	haarGroup->seBaseColor(238,53,35);
+	haarGroup->setShowText(false);
+	
+	// haar
+	panel.addToggle("detect and send features in blobs", "SENSE_HAAR", false);
+	//	ofEnableDataPath();
+	//	ofSetDataPathRoot("data/");
+	haarFiles = new simpleFileLister();	
+	int numHaar = haarFiles->listDir(ofToDataPath("haar", true));
+	ofLog(OF_LOG_VERBOSE, "haar files found " + numHaar);
+	panel.addFileLister("types of features:", haarFiles, 240, 100);
+	panel.addSlider("expand detection area:", "HAAR_PADDING", 0.0f, 0.0f, 200.0f, false);
+	
+	//JG GUI-REDUX: removing this feature
+	//gui.addToggle("send haar center as blob center", &p_Settings->bUseHaarAsCenter);
+	//JG 1/21/10 disabled this feature to simplify the interface
+	//	panel.addSlider("min. checkable haar size (%)", "MIN_HAAR", .1f, 0.0001f, 1.0f, false);
+	//	panel.addSlider("max. checkable haar size (%)", "MAX_HAAR", .5f, 0.0001f, 1.0f, false);
+*/
 	//communication
 	
 	panel.setWhichPanel("communication");
@@ -325,7 +387,7 @@ void ofxTSPSGuiManager::setup(){
 	ofAddListener(panel.getSaveAsButton()->buttonPressed, this, &ofxTSPSGuiManager::saveAsEventCatcher);
 	
 	//set active panel to be differencing
-	panel.setSelectedPanel("differencing");
+	panel.setSelectedPanel("sensing");
 	ofEventArgs nullArgs;
 	update(nullArgs);
 }
@@ -444,6 +506,8 @@ void ofxTSPSGuiManager::update(ofEventArgs &e)
 	//JG 12/8/09 GUI-REDUX Removing this feature
 	//gui.addToggle("smart learn background", &p_Settings->bSmartLearnBackground);
 	
+	p_Settings->bTrackBlobs = panel.getValueB("TRACK_BLOBS");
+	panel.setGroupActive("sensing", "blobs", p_Settings->bTrackBlobs);
 	p_Settings->minBlob = panel.getValueF("MIN_BLOB")/100.0f; //scale var to be right for tracker
 	p_Settings->maxBlob = panel.getValueF("MAX_BLOB")/100.0f;	//scale var to be right for tracker
 	p_Settings->bLearnBackgroundProgressive = panel.getValueB("RELEARN");
@@ -470,7 +534,13 @@ void ofxTSPSGuiManager::update(ofEventArgs &e)
 	//JG 1/21/10 disabled this feature to simplify the interface
 //	p_Settings->minHaarArea = panel.getValueF("MIN_HAAR");
 //	p_Settings->maxHaarArea = panel.getValueF("MAX_HAAR");
-	
+
+  //update fishes
+	p_Settings->bTrackArms = panel.getValueB("TRACK_ARMS");
+	panel.setGroupActive("fishes", "generaloptions", p_Settings->bTrackArms);
+	p_Settings->minArm = panel.getValueF("MIN_ARM")/100.0f; //scale var to be right for tracker
+	p_Settings->maxArm = panel.getValueF("MAX_ARM")/100.0f;	//scale var to be right for tracker
+  	
 	//update osc stuff
 	p_Settings->bSendOsc = panel.getValueB("SEND_OSC");
 	p_Settings->bSendTuio = panel.getValueB("SEND_TUIO");

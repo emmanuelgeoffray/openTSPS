@@ -77,6 +77,7 @@ public:
 	bool    bLearnBackgroundProgressive;
 	float   fLearnRate;
 	int     trackType;
+	bool    bTrackBlobs;
 	bool    bFindHoles;
 	float   minBlob;
 	float   maxBlob;
@@ -90,6 +91,11 @@ public:
 	float   haarAreaPadding;
 //	float   minHaarArea;
 //	float   maxHaarArea;
+
+  //fishes vars
+	bool    bTrackArms;
+	float   minArm;
+	float   maxArm;
 	
 	// communication vars
 	bool    bSendOsc;

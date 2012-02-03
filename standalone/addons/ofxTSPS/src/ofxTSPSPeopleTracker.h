@@ -243,8 +243,15 @@ class ofxTSPSPeopleTracker : public ofxCvBlobListener {
 		//more specific CV images for processing
 		
 		CPUImageFilter		grayDiff;
-		ofxCvShortImage		floatBgImg;
-		
+		ofxCvShortImage		floatBgImg;	
+
+    //canny	
+		ofxCvGrayscaleImage canny;
+    CvSeq*              lines;
+    CvMemStorage*       storage;
+
+    //fishes
+    float totalTheta;
 		//coord warping for cropping the camera image
 	
 		//ofxCvCoordWarping coordWarp;
