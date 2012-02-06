@@ -288,8 +288,8 @@ void ofxTSPSGuiManager::setup(){
 	
 	//JG 12/8/09 GUI-REDUX Removing this feature
 	panel.addToggle("track arms", "TRACK_ARMS", true);
-	panel.addSlider("minimum arm size (% of view):", "MIN_ARM", 1.f, 0.01f, 2.0f, false);
-	panel.addSlider("maximum arm size (% of view):", "MAX_ARM", .50f, 0.1f, 100.f, false);
+	panel.addSlider("minimum arm size (% of view):", "MIN_ARM", 1.f, 0.5f, 5.0f, false);
+	panel.addSlider("maximum arm size (% of view):", "MAX_ARM", .50f, 0.5f, 100.f, false);
 	//panel.addToggle("ignore nested blobs", "FIND_HOLES", false);
 /*	
 	guiTypeGroup * optionsGroup = panel.addGroup("options");

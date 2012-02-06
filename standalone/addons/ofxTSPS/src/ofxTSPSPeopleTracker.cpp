@@ -88,7 +88,7 @@ void ofxTSPSPeopleTracker::setup(int w, int h)
 	processedView.setTitle("Differenced View", "Differencing");
 	processedView.setColor(113,171,154);
 	
-	dataView.setImage(grayImageWarped);
+	dataView.setImage(canny);
 	dataView.setTitle("Data View", "Data");
 	dataView.setColor(191,120,0);
 	
@@ -442,7 +442,7 @@ void ofxTSPSPeopleTracker::trackPeople()
 	if (p_Settings->bTrackArms){
     //DETECT LINES WITH HOUGH TRANSFORM
     cvCanny(grayDiff.getCvImage(), canny.getCvImage(), 70, 200 );
-    lines = cvHoughLines2(canny.getCvImage(), storage, CV_HOUGH_STANDARD, 1, CV_PI/180, p_Settings->minArm*width*height);
+    lines = cvHoughLines2(canny.getCvImage(), storage, CV_HOUGH_STANDARD, 1, CV_PI/180, 1+p_Settings->minArm*width*height/100.);
     float totalAngles = 0;
     float totalCos = 0;
     float totalSin = 0;
@@ -473,10 +473,7 @@ void ofxTSPSPeopleTracker::trackPeople()
 		adjustedView.update(grayImageWarped);
 	bgView.update(grayBg);
 	processedView.update(grayDiff);
-  if (p_Settings->bAdjustedViewInColor)
-		dataView.update(colorImageWarped);
-	else
-		dataView.update(grayImageWarped);
+  dataView.update(canny);
 	  
 	//-----------------------
 	// COMMUNICATION
@@ -806,22 +803,44 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
     ofSetHexColor(0xffffff);				
     //ofDrawBitmapString("blobs and optical flow", 5, height - 5 );
   }
-	if (p_Settings->bTrackBlobs){
+	if (p_Settings->bTrackArms){
     float scaleVar = (float) drawWidth/width;
     ofPushMatrix();
     ofScale(scaleVar, scaleVar);
     ofSetColor(34,151,210);
     for( int i = 0; i < MIN(lines->total,10000); i++ ) {
       float* line = (float*)cvGetSeqElem(lines,i);
-      float rho = line[0];
+      float r = line[0];
       float theta = line[1];
       CvPoint pt1, pt2;
-      double a = cos(theta), b = sin(theta);
-      double x0 = a*rho, y0 = b*rho;
-      pt1.x = cvRound(x0 + 1000*(-b));
-      pt1.y = cvRound(y0 + 1000*(a));
-      pt2.x = cvRound(x0 - 1000*(-b));
-      pt2.y = cvRound(y0 - 1000*(a));
+      double cos0 = cos(theta), sin0 = sin(theta);
+      double rcos0 = r*cos0, rsin0 = r*sin0;
+      //pt1.y = 0
+      double a = -rsin0/cos0;
+      pt1.x = cvRound(rcos0 - a*sin0);
+      pt1.y = cvRound(rsin0 + a*cos0);
+      //unless it's out of screen
+      if (pt1.x < 0){
+        a = rcos0/sin0;
+      } else if (pt1.x > width){
+        a = (rcos0 - width)/sin0;
+      }
+      pt1.x = cvRound(rcos0 - a*sin0);
+      pt1.y = cvRound(rsin0 + a*cos0);
+      
+      //pt2.y = height
+      a = (height-rsin0)/cos0;
+      pt2.x = cvRound(rcos0 - a*sin0);
+      pt2.y = cvRound(rsin0 + a*cos0);
+       //unless it's out of screen
+      if (pt2.x < 0){
+        a = rcos0/sin0;
+      } else if (pt2.x > width){
+        a = (rcos0 - width)/sin0;
+      }
+      pt2.x = cvRound(rcos0 - a*sin0);
+      pt2.y = cvRound(rsin0 + a*cos0);
+      
       ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
     } 
     ofPopMatrix();
