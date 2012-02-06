@@ -843,6 +843,22 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
       
       ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
     } 
+    //red line for average direction
+    if (isnormal(totalTheta)){
+      CvPoint pt1, pt2;
+      pt1.x = width/2;
+      pt1.y = height;
+      float r = width/2, theta = totalTheta + (3*CV_PI/2);
+      double cos0 = cos(theta), sin0 = sin(theta);
+      pt2.x = pt1.x + (r * cos0);
+      pt2.y = pt1.y + (r * sin0);
+      if (pt2.y > height){
+        pt2.x = pt1.x - (r * cos0);
+        pt2.y = pt1.y - (r * sin0);
+      }  
+      ofSetColor(255, 0, 0);
+      ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
+    }
     ofPopMatrix();
     ofSetHexColor(0xffffff);				
   }

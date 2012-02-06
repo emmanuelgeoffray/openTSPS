@@ -22,7 +22,7 @@
     <val_0>138.889</val_0>
 </RELEARN_BACKGROUND>
 <THRESHOLD>
-    <val_0>137.417</val_0>
+    <val_0>18.4167</val_0>
 </THRESHOLD>
 <BLOB_TYPE>
     <val_0>0</val_0>
@@ -115,7 +115,7 @@
     <val_0>1</val_0>
 </TRACK_ARMS>
 <MIN_ARM>
-    <val_0>3.25</val_0>
+    <val_0>2.3</val_0>
 </MIN_ARM>
 <MAX_ARM>
     <val_0>0.5</val_0>
