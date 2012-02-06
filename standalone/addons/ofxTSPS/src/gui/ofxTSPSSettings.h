@@ -95,7 +95,10 @@ public:
   //fishes vars
 	bool    bTrackArms;
 	float   minArm;
-	float   maxArm;
+	//float   maxArm;
+  bool    bSenseLeftRight;
+  float   leftAngleThres;
+  float   rightAngleThres;
 	
 	// communication vars
 	bool    bSendOsc;

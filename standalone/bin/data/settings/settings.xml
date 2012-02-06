@@ -120,3 +120,12 @@
 <MAX_ARM>
     <val_0>0.5</val_0>
 </MAX_ARM>
+<SENSE_LEFTRIGHT>
+    <val_0>1</val_0>
+</SENSE_LEFTRIGHT>
+<LEFT_ANGLE_THRES>
+    <val_0>0.688889</val_0>
+</LEFT_ANGLE_THRES>
+<RIGHT_ANGLE_THRES>
+    <val_0>0.738889</val_0>
+</RIGHT_ANGLE_THRES>

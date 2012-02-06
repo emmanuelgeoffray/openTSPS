@@ -859,6 +859,33 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
       ofSetColor(255, 0, 0);
       ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
     }
+    if (p_Settings->bSenseLeftRight){
+      //left
+      CvPoint pt1, pt2;
+      pt1.x = width/2;
+      pt1.y = height;
+      float r = width/2, theta = 3*CV_PI/2 + (p_Settings->leftAngleThres*CV_PI/2)+ (3*CV_PI/2);
+      double cos0 = cos(theta), sin0 = sin(theta);
+      pt2.x = pt1.x + (r * cos0);
+      pt2.y = pt1.y + (r * sin0);
+      if (pt2.y > height){
+        pt2.x = pt1.x - (r * cos0);
+        pt2.y = pt1.y - (r * sin0);
+      }  
+      ofSetColor(0, 255, 0);
+      ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
+      //right
+      theta = CV_PI/2 - (p_Settings->rightAngleThres*CV_PI/2)+ (3*CV_PI/2);
+      cos0 = cos(theta); sin0 = sin(theta);
+      pt2.x = pt1.x + (r * cos0);
+      pt2.y = pt1.y + (r * sin0);
+      if (pt2.y > height){
+        pt2.x = pt1.x - (r * cos0);
+        pt2.y = pt1.y - (r * sin0);
+      }  
+      ofSetColor(0, 255, 0);
+      ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
+    }
     ofPopMatrix();
     ofSetHexColor(0xffffff);				
   }

@@ -283,13 +283,12 @@ void ofxTSPSGuiManager::setup(){
 	guiTypeGroup * generalGroup = panel.addGroup("generaloptions");
 	generalGroup->setBackgroundColor(148,129,85);
 	generalGroup->setBackgroundSelectColor(148,129,85);
-	generalGroup->seBaseColor(238,218,0);
+	generalGroup->seBaseColor(34,151,210);
 	generalGroup->setShowText(false);
 	
-	//JG 12/8/09 GUI-REDUX Removing this feature
 	panel.addToggle("track arms", "TRACK_ARMS", true);
 	panel.addSlider("minimum arm size (% of view):", "MIN_ARM", 1.f, 0.5f, 5.0f, false);
-	panel.addSlider("maximum arm size (% of view):", "MAX_ARM", .50f, 0.5f, 100.f, false);
+	//panel.addSlider("maximum arm size (% of view):", "MAX_ARM", .50f, 0.5f, 100.f, false);
 	//panel.addToggle("ignore nested blobs", "FIND_HOLES", false);
 /*	
 	guiTypeGroup * optionsGroup = panel.addGroup("options");
@@ -298,17 +297,17 @@ void ofxTSPSGuiManager::setup(){
 	optionsGroup->seBaseColor(58,187,147);
 	optionsGroup->setShowText(false);
 	panel.addToggle("track and send contours", "SEND_OSC_CONTOURS", false);
-	
-	guiTypeGroup * opticalGroup = panel.addGroup("optical flow");
-	opticalGroup->setBackgroundColor(148,129,85);
-	opticalGroup->setBackgroundSelectColor(148,129,85);
-	opticalGroup->seBaseColor(34,151,210);
-	opticalGroup->setShowText(false);
+*/	
+	guiTypeGroup * leftrightGroup = panel.addGroup("leftright");
+	leftrightGroup->setBackgroundColor(148,129,85);
+	leftrightGroup->setBackgroundSelectColor(148,129,85);
+	leftrightGroup->seBaseColor(238,218,0);
+	leftrightGroup->setShowText(false);
 	//optical flow
-	panel.addToggle("track and send optical flow in blobs", "SENSE_OPTICAL_FLOW", true);
-	panel.addSlider("filter vectors smaller than:", "MIN_OPTICAL_FLOW", 0, 0, 5.0, false);
-	panel.addSlider("clamp vectors: larger than", "MAX_OPTICAL_FLOW", 10, 5.0, 200, false);
-	
+	panel.addToggle("track and send right or left direction", "SENSE_LEFTRIGHT", true);
+	panel.addSlider("left angle threshold:", "LEFT_ANGLE_THRES", 0.5, 0.0, 1.0, false);
+	panel.addSlider("right angle threshold:", "RIGHT_ANGLE_THRES", 0.5, 0.0, 1.0, false);
+/*	
 	guiTypeGroup * haarGroup = panel.addGroup("haar tracking");
 	haarGroup->setBackgroundColor(148,129,85);
 	haarGroup->setBackgroundSelectColor(148,129,85);
@@ -539,7 +538,10 @@ void ofxTSPSGuiManager::update(ofEventArgs &e)
 	p_Settings->bTrackArms = panel.getValueB("TRACK_ARMS");
 	panel.setGroupActive("fishes", "generaloptions", p_Settings->bTrackArms);
 	p_Settings->minArm = panel.getValueF("MIN_ARM")/100.0f; //scale var to be right for tracker
-	p_Settings->maxArm = panel.getValueF("MAX_ARM")/100.0f;	//scale var to be right for tracker
+	//p_Settings->maxArm = panel.getValueF("MAX_ARM")/100.0f;	//scale var to be right for tracker
+	p_Settings->bSenseLeftRight = (panel.getValueB("SENSE_LEFTRIGHT"));
+	p_Settings->leftAngleThres = panel.getValueF("LEFT_ANGLE_THRES");
+	p_Settings->rightAngleThres = panel.getValueF("RIGHT_ANGLE_THRES");
   	
 	//update osc stuff
 	p_Settings->bSendOsc = panel.getValueB("SEND_OSC");
