@@ -112,7 +112,7 @@
     <val_0>0</val_0>
 </TRACK_BLOBS>
 <TRACK_ARMS>
-    <val_0>1</val_0>
+    <val_0>0</val_0>
 </TRACK_ARMS>
 <MIN_ARM>
     <val_0>3.4</val_0>
@@ -121,7 +121,7 @@
     <val_0>0.5</val_0>
 </MAX_ARM>
 <SENSE_LEFTRIGHT>
-    <val_0>1</val_0>
+    <val_0>0</val_0>
 </SENSE_LEFTRIGHT>
 <LEFT_ANGLE_THRES>
     <val_0>0.727778</val_0>

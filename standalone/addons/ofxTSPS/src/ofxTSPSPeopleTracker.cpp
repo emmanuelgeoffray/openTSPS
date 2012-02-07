@@ -830,7 +830,7 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
     ofSetHexColor(0xffffff);				
     //ofDrawBitmapString("blobs and optical flow", 5, height - 5 );
   }
-	if (p_Settings->bTrackArms){
+	if (p_Settings->bTrackArms && lines !=0){
     float scaleVar = (float) drawWidth/width;
     ofPushMatrix();
     ofScale(scaleVar, scaleVar);
