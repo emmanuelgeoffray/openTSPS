@@ -203,13 +203,22 @@ void tspsApp::exit(){
 
 //--------------------------------------------------------------
 void tspsApp::keyPressed  (int key){
-
 	switch (key){
 		case ' ':{
 			peopleTracker.relearnBackground();
 		} break;
 		case 'f':{
 			ofToggleFullscreen();
+		} break;
+		case OF_KEY_LEFT:{
+			peopleTracker.goLeft();
+		} break;
+		case OF_KEY_RIGHT:{
+			peopleTracker.goRight();
+		} break;
+		case OF_KEY_UP:
+    case OF_KEY_DOWN:{
+			peopleTracker.goStraight();
 		} break;
 	}
 }

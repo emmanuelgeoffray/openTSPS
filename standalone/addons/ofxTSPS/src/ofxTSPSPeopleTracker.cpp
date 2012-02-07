@@ -506,7 +506,7 @@ void ofxTSPSPeopleTracker::trackPeople()
         }
     }
   //fishes
-  if (p_Settings->bSenseLeftRight &&bOscEnabled){
+  if (p_Settings->bSenseLeftRight && bOscEnabled){
     if (totalTheta > CV_PI/2 && totalTheta < CV_PI/2 + p_Settings->leftAngleThres*CV_PI/2){
       oscClient.goLeft();
     } else if (totalTheta < CV_PI/2 && totalTheta > (1 - p_Settings->rightAngleThres)*CV_PI/2){
@@ -543,6 +543,22 @@ void ofxTSPSPeopleTracker::trackPeople()
         webSocketServer.send();
     }
 }
+
+void ofxTSPSPeopleTracker::goLeft(){
+	if (bOscEnabled){
+      oscClient.goLeft();
+  }
+};
+void ofxTSPSPeopleTracker::goRight(){
+	if (bOscEnabled){
+      oscClient.goRight();
+  }
+};
+void ofxTSPSPeopleTracker::goStraight(){
+	if (bOscEnabled){
+      oscClient.goStraight();
+  }
+};
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

@@ -113,11 +113,13 @@ class ofxTSPSPeopleTracker : public ofxCvBlobListener {
 		void mousePressed(ofMouseEventArgs &e);	
 		
 		//communication
-		
+    void goLeft();
+    void goRight();
+    void goStraight();
 		void setupTuio(string ip, int port);
 		void setupOsc(string ip, int port);
 		void setupTcp(int port);
-        void setupWebSocket(int port);
+    void setupWebSocket(int port);
 		void setListener(ofxPersonListener* delegate);
 	
 		//tracking metrics
