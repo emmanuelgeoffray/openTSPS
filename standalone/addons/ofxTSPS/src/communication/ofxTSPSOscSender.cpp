@@ -63,6 +63,36 @@ void ofxTSPSOscSender::update(){
  SEND
 ***************************************************************/
 
+void ofxTSPSOscSender::goLeft(){
+  ofxOscMessage m;
+  m.setAddress( "/keyboard/left" );
+  m.addIntArg( 1 );
+  send(m);
+  ofxOscMessage m2;
+  m2.setAddress( "/keyboard/right" );
+  m2.addIntArg( 0 );
+  send(m2);
+};
+void ofxTSPSOscSender::goRight(){
+  ofxOscMessage m;
+  m.setAddress( "/keyboard/left" );
+  m.addIntArg( 0 );
+  send(m);
+  ofxOscMessage m2;
+  m2.setAddress( "/keyboard/right" );
+  m2.addIntArg( 1 );
+  send(m2);
+};
+void ofxTSPSOscSender::goStraight(){
+  ofxOscMessage m;
+  m.setAddress( "/keyboard/left" );
+  m.addIntArg( 0 );
+  send(m);
+  ofxOscMessage m2;
+  m2.setAddress( "/keyboard/right" );
+  m2.addIntArg( 0 );
+  send(m2);
+};
 
 void ofxTSPSOscSender::personEntered ( ofxTSPSPerson * p, ofPoint centroid, int cameraWidth, int cameraHeight, bool bSendContours ){
 	ofxOscMessage m;

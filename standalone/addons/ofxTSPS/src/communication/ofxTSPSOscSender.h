@@ -54,7 +54,9 @@ class ofxTSPSOscSender : public ofxOscSender
 	void personMoved ( ofxTSPSPerson * p, ofPoint centroid, int cameraWidth, int cameraHeight, bool sendContours = false );
 	void personUpdated ( ofxTSPSPerson * p, ofPoint centroid, int cameraWidth, int cameraHeight, bool sendContours = false );
 	void personWillLeave ( ofxTSPSPerson * p, ofPoint centroid, int cameraWidth, int cameraHeight, bool sendContours = false );
-
+  void goLeft();
+  void goRight();
+  void goStraight();
 	void send ( ofxOscMessage m );
 	void reroute(string _ip, int _port);
 

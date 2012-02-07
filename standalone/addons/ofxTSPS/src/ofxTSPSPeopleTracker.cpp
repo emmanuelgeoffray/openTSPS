@@ -455,7 +455,7 @@ void ofxTSPSPeopleTracker::trackPeople()
     totalSin/= MIN(lines->total,10000);
     totalCos/= MIN(lines->total,10000);
     totalTheta = atan2(totalSin,totalCos);
-    cout << "Total Theta: " << totalTheta << endl;
+    //cout << "Total Theta: " << totalTheta << endl;
   }
 	//-----------------------
 	// VIEWS
@@ -478,7 +478,7 @@ void ofxTSPSPeopleTracker::trackPeople()
 	//-----------------------
 	// COMMUNICATION
 	//-----------------------	
-
+  //persons
     for (int i = 0; i < trackedPeople.size(); i++){
         ofxTSPSPerson* p = trackedPeople[i];
         ofPoint centroid = p->getCentroidNormalized(width, height);
@@ -505,7 +505,18 @@ void ofxTSPSPeopleTracker::trackPeople()
             webSocketServer.personMoved(p, centroid, width, height, p_Settings->bSendOscContours);
         }
     }
+  //fishes
+  if (p_Settings->bSenseLeftRight &&bOscEnabled){
+    if (totalTheta > CV_PI/2 && totalTheta < CV_PI/2 + p_Settings->leftAngleThres*CV_PI/2){
+      oscClient.goLeft();
+    } else if (totalTheta < CV_PI/2 && totalTheta > (1 - p_Settings->rightAngleThres)*CV_PI/2){
+      oscClient.goRight();
+    } else {
+      oscClient.goStraight();
+    }
+  }
     
+  //setup
 	if(bTuioEnabled){
 		tuioClient.update();		
 	}
@@ -885,6 +896,20 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
       }  
       ofSetColor(0, 255, 0);
       ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
+
+      //show left or right decision
+      int sqsize = 50;
+      //left
+      if (totalTheta > CV_PI/2 && totalTheta < CV_PI/2 + p_Settings->leftAngleThres*CV_PI/2){
+        ofRect(0, height-sqsize, sqsize, sqsize);
+      //right
+      } else if (totalTheta < CV_PI/2 && totalTheta > (1-p_Settings->rightAngleThres)*CV_PI/2){
+        ofRect(width-sqsize, height-sqsize, sqsize, sqsize);
+      //straight
+      } else {
+        ofRect(width/2-sqsize/2, height-sqsize, sqsize, sqsize);
+      }
+
     }
     ofPopMatrix();
     ofSetHexColor(0xffffff);				
