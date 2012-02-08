@@ -34,3 +34,18 @@ crack at the standalone app for other platforms!
 2. clone the TSPS directory into openframeworks/apps
 3. open the XCode project in openTSPS/openTSPSStandalone
 4. compile and run!
+
+Compiling Linux
+------------
+*note:* the TSPS standalone app was compiled and tested on Linux Mint 12
+
+1. git clone https://github.com/openframeworks/openFrameworks.git
+2. cd openFrameworks/addons/ 
+3. git clone git@github.com:manuelgeoffray/openTSPS.git
+3. cd openFrameworks/scripts/linux/ubuntu/; sudo sh install_dependencies.sh
+4. sudo apt-get install libusb-1.0-0-dev
+5. git clone git://git.warmcat.com/libwebsockets
+6. ./configure; sudo make install
+7. sudo mv /usr/local/lib/libwebsockets.* /usr/lib/
+8. cd openFrameworks/addons/openTSPS/standalone/; make
+8. cd bin; ./standalone
