@@ -36,7 +36,7 @@
 #include <iostream>
 
 enum tspsTrackingType {
-	TRACK_DARK, TRACK_LIGHT, TRACK_ABSOLUTE
+	TRACK_DARK, TRACK_LIGHT, TRACK_ABSOLUTE, NO_DIFFERENCING
 };
 
 enum tspsInputType {
@@ -72,7 +72,10 @@ public:
 	bool    bSmooth;
 	bool    bLearnBackground;
 	bool    bAdjustedViewInColor;	
-	
+  bool    bEdgeDetection;
+  int     edgeThres1;
+  int     edgeThres2;
+
 	// tracking vars
 	bool    bLearnBackgroundProgressive;
 	float   fLearnRate;

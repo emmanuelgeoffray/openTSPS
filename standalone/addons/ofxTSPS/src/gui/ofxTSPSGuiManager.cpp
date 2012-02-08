@@ -199,6 +199,7 @@ void ofxTSPSGuiManager::setup(){
 	multi.push_back("light on dark");
 	multi.push_back("dark on light");
 	multi.push_back("absolute difference");
+	multi.push_back("no differencing");
 	panel.addMultiToggle("type of differencing:", "BLOB_TYPE", 0, multi);
 	
 	guiTypeGroup * highpassGroup = panel.addGroup("highpass");
@@ -217,6 +218,18 @@ void ofxTSPSGuiManager::setup(){
 	smoothingGroup->setShowText(false);
 	panel.addToggle("use shape smoothing", "USE_SMOOTHING", false);
 	panel.addSlider("smooth amount:", "SMOOTH_AMOUNT", 0, 0, 15, false);		
+	
+  guiTypeGroup * edgeGroup = panel.addGroup("edge");
+	edgeGroup->setBackgroundColor(148,129,85);
+	edgeGroup->setBackgroundSelectColor(148,129,85);
+	edgeGroup->seBaseColor(238,218,0);
+	edgeGroup->setShowText(false);
+	//edgeGroup->setActive(true);
+	
+	//JG 12/8/09 GUI-REDUX Removing this feature
+	panel.addToggle("edge detection", "EDGE_DETECTION", true);
+	panel.addSlider("threshold1 for hysteresis (% of view):", "EDGE_THRES1", 70, 0, 255, false);
+	panel.addSlider("threshold2 for hysteresis (% of view):", "EDGE_THRES2", 200, 0, 255, false);
 	
 	//sensing
 	
@@ -479,6 +492,11 @@ void ofxTSPSGuiManager::update(ofEventArgs &e)
 	p_Settings->highpassBlur =  panel.getValueI("HIGHPASS_BLUR");
 	p_Settings->highpassNoise = panel.getValueI("HIGHPASS_NOISE");
 	panel.setGroupActive("differencing", "highpass", p_Settings->bHighpass);
+	
+  p_Settings->bEdgeDetection = panel.getValueI("EDGE_DETECTION");
+	p_Settings->edgeThres1 = panel.getValueI("EDGE_THRES1");
+	p_Settings->edgeThres2 = panel.getValueI("EDGE_THRES2");
+	panel.setGroupActive("differencing", "edge", p_Settings->bEdgeDetection);
 	
 	p_Settings->bAmplify = panel.getValueB("USE_AMPLIFICATION");
 	p_Settings->highpassAmp = panel.getValueI("AMPLIFICATION_AMOUNT");

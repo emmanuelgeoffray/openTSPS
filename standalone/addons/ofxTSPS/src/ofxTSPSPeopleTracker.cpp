@@ -308,9 +308,16 @@ void ofxTSPSPeopleTracker::trackPeople()
 	}
 	
 	//threshold	
-	grayDiff.threshold(p_Settings->threshold);
-	
-	//-----------------------
+	if (p_Settings->trackType != NO_DIFFERENCING){
+    grayDiff.threshold(p_Settings->threshold);
+  }
+
+  //Edge detector
+	if(p_Settings->bEdgeDetection){
+    cvCanny(grayDiff.getCvImage(), grayDiff.getCvImage(), p_Settings->edgeThres1, p_Settings->edgeThres2);
+  }
+
+  //-----------------------
 	// TRACKING
 	//-----------------------	
 	if (p_Settings->bTrackBlobs){
@@ -441,8 +448,7 @@ void ofxTSPSPeopleTracker::trackPeople()
   //TRACK FISHES
 	if (p_Settings->bTrackArms){
     //DETECT LINES WITH HOUGH TRANSFORM
-    cvCanny(grayDiff.getCvImage(), canny.getCvImage(), 70, 200 );
-    lines = cvHoughLines2(canny.getCvImage(), storage, CV_HOUGH_STANDARD, 1, CV_PI/180, 1+p_Settings->minArm*width*height/100.);
+    lines = cvHoughLines2(grayDiff.getCvImage(), storage, CV_HOUGH_STANDARD, 1, CV_PI/180, 1 + p_Settings->minArm*width*height/100.);
     float totalAngles = 0;
     float totalCos = 0;
     float totalSin = 0;
@@ -473,7 +479,7 @@ void ofxTSPSPeopleTracker::trackPeople()
 		adjustedView.update(grayImageWarped);
 	bgView.update(grayBg);
 	processedView.update(grayDiff);
-  dataView.update(canny);
+  dataView.update(grayDiff);
 	  
 	//-----------------------
 	// COMMUNICATION
