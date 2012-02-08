@@ -68,8 +68,8 @@ void tspsApp::setup(){
 	personEnteredImage.loadImage("graphic/triggers/PersonEntered_Active.png");
 	personUpdatedImage.loadImage("graphic/triggers/PersonUpdated_Active.png");
 	personLeftImage.loadImage("graphic/triggers/PersonLeft_Active.png");
-	statusBar.loadImage("graphic/bottomBar.png");
-	background.loadImage("graphic/background.png");
+	statusBar.loadImage("graphic/scbottomBar.png");
+	background.loadImage("graphic/scbackground.png");
 	timesBoldItalic.loadFont("fonts/timesbi.ttf", 16);
     
 	drawStatus[0] = 0;

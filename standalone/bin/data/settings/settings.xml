@@ -22,7 +22,7 @@
     <val_0>138.889</val_0>
 </RELEARN_BACKGROUND>
 <THRESHOLD>
-    <val_0>90.6667</val_0>
+    <val_0>53.8333</val_0>
 </THRESHOLD>
 <BLOB_TYPE>
     <val_0>0</val_0>
@@ -112,16 +112,16 @@
     <val_0>0</val_0>
 </TRACK_BLOBS>
 <TRACK_ARMS>
-    <val_0>0</val_0>
+    <val_0>1</val_0>
 </TRACK_ARMS>
 <MIN_ARM>
-    <val_0>3.4</val_0>
+    <val_0>3.175</val_0>
 </MIN_ARM>
 <MAX_ARM>
     <val_0>0.5</val_0>
 </MAX_ARM>
 <SENSE_LEFTRIGHT>
-    <val_0>0</val_0>
+    <val_0>1</val_0>
 </SENSE_LEFTRIGHT>
 <LEFT_ANGLE_THRES>
     <val_0>0.727778</val_0>
