@@ -10,7 +10,7 @@
     // TSPS core
     #include "ofxTSPS.h"
 
-    #define _USE_LIVE_VIDEO         // comment out to load a movie file
+    //#define _USE_LIVE_VIDEO         // comment out to load a movie file
     //#define USE_CUSTOM_GUI		// uncomment to add a "custom" panel to the gui
 	
     // kinect support
@@ -64,6 +64,7 @@ class tspsApp : public ofBaseApp, public ofxPersonListener {
     
 		#else
 		  ofVideoPlayer 		vidPlayer;
+      bool              videoPause;
 		#endif
 	
         void initVideoInput();

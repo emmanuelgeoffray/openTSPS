@@ -75,6 +75,7 @@ public:
   bool    bEdgeDetection;
   int     edgeThres1;
   int     edgeThres2;
+  int     dilatation;
 
 	// tracking vars
 	bool    bLearnBackgroundProgressive;

@@ -20,18 +20,9 @@ void tspsApp::setup(){
 	camWidth = 640;
 	camHeight = 480;
 
-    // allocate images + setup people tracker
-	colorImg.allocate(camWidth, camHeight);
-    grayImg.allocate(camWidth, camHeight);
-	
-	peopleTracker.setup(camWidth, camHeight);
-	peopleTracker.loadFont("fonts/times.ttf", 10);
-	peopleTracker.setListener( this );
-    
+	#ifdef _USE_LIVE_VIDEO
     bKinect         = false;
     cameraState     = CAMERA_NOT_INITED;
-    
-	#ifdef _USE_LIVE_VIDEO
     
     // are there any kinects out there?
     kinect.init();
@@ -47,15 +38,22 @@ void tspsApp::setup(){
         initVideoInput();
     }
     
-    #else
-    vidPlayer.loadMovie("testmovie/twoPeopleStand.mov");
+  #else
+    vidPlayer.loadMovie("testmovie/capture.avi");
     vidPlayer.play();
     camWidth = vidPlayer.width;
     camHeight = vidPlayer.height;
-	#endif
+  #endif
 
 	
-	/*
+  // allocate images + setup people tracker
+	colorImg.allocate(camWidth, camHeight);
+  grayImg.allocate(camWidth, camHeight);
+	
+	peopleTracker.setup(camWidth, camHeight);
+	peopleTracker.loadFont("fonts/times.ttf", 10);
+	peopleTracker.setListener( this );
+  /*
 	//THIS IS HOW YOU CAN ADD CUSTOM PARAMETERS TO THE GUI
 	peopleTracker.addSlider("custom INTEGER", &itestValue, 0, ofGetWidth());
 	peopleTracker.addSlider("custom FLOAT", &ftestValue, 0, ofGetHeight());
@@ -79,6 +77,10 @@ void tspsApp::setup(){
 
 //--------------------------------------------------------------
 void tspsApp::update(){
+    
+    bool bNewFrame = false;
+
+	#ifdef _USE_LIVE_VIDEO
     if (peopleTracker.useKinect() && !bKinect){
         bKinect = true;
         initVideoInput();
@@ -86,10 +88,6 @@ void tspsApp::update(){
         bKinect = false;
         initVideoInput();
     }
-    
-    bool bNewFrame = false;
-
-	#ifdef _USE_LIVE_VIDEO
     if ( cameraState != CAMERA_NOT_INITED){
         if ( cameraState == CAMERA_KINECT ){
             kinect.update();
@@ -119,11 +117,13 @@ void tspsApp::update(){
         peopleTracker.update(colorImg);
         #endif
         
+    #ifdef _USE_LIVE_VIDEO
 		//iterate through the people
 		for(int i = 0; i < peopleTracker.totalPeople(); i++){
 			ofxTSPSPerson* p = peopleTracker.personAtIndex(i);
             if (cameraState == CAMERA_KINECT) p->depth = kinect.getDistanceAt( p->centroid );
 		}
+    #endif
 	}
 }
 
@@ -197,8 +197,10 @@ void tspsApp::draw(){
 
 //--------------------------------------------------------------
 void tspsApp::exit(){
+    #ifdef _USE_LIVE_VIDEO
     if ( !cameraState == CAMERA_KINECT){  
     }
+    #endif
 }
 
 //--------------------------------------------------------------
@@ -220,6 +222,15 @@ void tspsApp::keyPressed  (int key){
     case OF_KEY_DOWN:{
 			peopleTracker.goStraight();
 		} break;
+	#ifndef _USE_LIVE_VIDEO
+    case 'a':{
+			vidPlayer.firstFrame();
+		} break;
+    case 'p':{
+      videoPause =! videoPause;
+			vidPlayer.setPaused(videoPause);
+		} break;
+  #endif
 	}
 }
 

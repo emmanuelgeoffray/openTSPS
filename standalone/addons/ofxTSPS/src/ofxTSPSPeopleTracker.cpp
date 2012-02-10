@@ -315,6 +315,7 @@ void ofxTSPSPeopleTracker::trackPeople()
   //Edge detector
 	if(p_Settings->bEdgeDetection){
     cvCanny(grayDiff.getCvImage(), grayDiff.getCvImage(), p_Settings->edgeThres1, p_Settings->edgeThres2);
+    cvDilate(grayDiff.getCvImage(), grayDiff.getCvImage() , 0, p_Settings->dilatation);
   }
 
   //-----------------------
@@ -452,16 +453,24 @@ void ofxTSPSPeopleTracker::trackPeople()
     float totalAngles = 0;
     float totalCos = 0;
     float totalSin = 0;
+    totalTheta = 0;
+    cout << "Thetas: ";
     for( int i = 0; i < MIN(lines->total,10000); i++ ) {
       float* line = (float*)cvGetSeqElem(lines,i);
       float theta = line[1];
       totalSin += sin(theta);
       totalCos += cos(theta);
+      cout << theta << " |";
+      theta = (theta > CV_PI/2) ? theta -CV_PI : theta;
+      totalTheta += theta;
     }
+    cout << endl;
     totalSin/= MIN(lines->total,10000);
     totalCos/= MIN(lines->total,10000);
-    totalTheta = atan2(totalSin,totalCos);
-    //cout << "Total Theta: " << totalTheta << endl;
+    totalTheta/= MIN(lines->total,10000);
+    cout << "Total Theta: " << totalTheta << endl;
+    //totalTheta = atan2(totalSin,totalCos);
+    //cout << "Total ThetaTan: " << totalTheta << endl;
   }
 	//-----------------------
 	// VIEWS
@@ -513,7 +522,7 @@ void ofxTSPSPeopleTracker::trackPeople()
     }
   //fishes
   if (p_Settings->bSenseLeftRight && bOscEnabled){
-    if (totalTheta > CV_PI/2 && totalTheta < CV_PI/2 + p_Settings->leftAngleThres*CV_PI/2){
+    if (totalTheta < 0 && totalTheta < (1 - p_Settings->leftAngleThres)*CV_PI/2){
       oscClient.goLeft();
     } else if (totalTheta < CV_PI/2 && totalTheta > (1 - p_Settings->rightAngleThres)*CV_PI/2){
       oscClient.goRight();
@@ -922,7 +931,7 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
       //show left or right decision
       int sqsize = 50;
       //left
-      if (totalTheta > CV_PI/2 && totalTheta < CV_PI/2 + p_Settings->leftAngleThres*CV_PI/2){
+        if (totalTheta < 0 && totalTheta < -(1 - p_Settings->leftAngleThres)*CV_PI/2){
         ofRect(0, height-sqsize, sqsize, sqsize);
       //right
       } else if (totalTheta < CV_PI/2 && totalTheta > (1-p_Settings->rightAngleThres)*CV_PI/2){

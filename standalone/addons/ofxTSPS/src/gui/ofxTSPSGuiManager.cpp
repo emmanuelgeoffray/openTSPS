@@ -228,8 +228,9 @@ void ofxTSPSGuiManager::setup(){
 	
 	//JG 12/8/09 GUI-REDUX Removing this feature
 	panel.addToggle("edge detection", "EDGE_DETECTION", true);
-	panel.addSlider("threshold1 for hysteresis (% of view):", "EDGE_THRES1", 70, 0, 255, false);
-	panel.addSlider("threshold2 for hysteresis (% of view):", "EDGE_THRES2", 200, 0, 255, false);
+	panel.addSlider("threshold1 for hysteresis:", "EDGE_THRES1", 70, 0, 255, true);
+	panel.addSlider("threshold2 for hysteresis:", "EDGE_THRES2", 200, 0, 255, true);
+	panel.addSlider("dilatation:", "DILATATION", 2, 0, 10, true);
 	
 	//sensing
 	
@@ -300,7 +301,7 @@ void ofxTSPSGuiManager::setup(){
 	generalGroup->setShowText(false);
 	
 	panel.addToggle("track arms", "TRACK_ARMS", true);
-	panel.addSlider("minimum arm size (% of view):", "MIN_ARM", 1.f, 0.5f, 5.0f, false);
+	panel.addSlider("minimum arm size (% of view):", "MIN_ARM", 1.f, 0.5f, 30.0f, false);
 	//panel.addSlider("maximum arm size (% of view):", "MAX_ARM", .50f, 0.5f, 100.f, false);
 	//panel.addToggle("ignore nested blobs", "FIND_HOLES", false);
 /*	
@@ -496,6 +497,7 @@ void ofxTSPSGuiManager::update(ofEventArgs &e)
   p_Settings->bEdgeDetection = panel.getValueI("EDGE_DETECTION");
 	p_Settings->edgeThres1 = panel.getValueI("EDGE_THRES1");
 	p_Settings->edgeThres2 = panel.getValueI("EDGE_THRES2");
+	p_Settings->dilatation = panel.getValueI("DILATATION");
 	panel.setGroupActive("differencing", "edge", p_Settings->bEdgeDetection);
 	
 	p_Settings->bAmplify = panel.getValueB("USE_AMPLIFICATION");
