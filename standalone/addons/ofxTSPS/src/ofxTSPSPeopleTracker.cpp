@@ -522,13 +522,16 @@ void ofxTSPSPeopleTracker::trackPeople()
     }
   //fishes
   if (p_Settings->bSenseLeftRight && bOscEnabled){
-    if (totalTheta < 0 && totalTheta < (1 - p_Settings->leftAngleThres)*CV_PI/2){
-      oscClient.goLeft();
-    } else if (totalTheta < CV_PI/2 && totalTheta > (1 - p_Settings->rightAngleThres)*CV_PI/2){
-      oscClient.goRight();
-    } else {
-      oscClient.goStraight();
-    }
+      //left
+      if (totalTheta < 0 && totalTheta < -(1 - p_Settings->leftAngleThres)*CV_PI/2){
+        oscClient.goLeft();
+      //right
+      } else if (totalTheta < CV_PI/2 && totalTheta > (1-p_Settings->rightAngleThres)*CV_PI/2){
+        oscClient.goRight();
+      //straight
+      } else {
+        oscClient.goStraight();
+      }
   }
     
   //setup
@@ -931,7 +934,7 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
       //show left or right decision
       int sqsize = 50;
       //left
-        if (totalTheta < 0 && totalTheta < -(1 - p_Settings->leftAngleThres)*CV_PI/2){
+      if (totalTheta < 0 && totalTheta < -(1 - p_Settings->leftAngleThres)*CV_PI/2){
         ofRect(0, height-sqsize, sqsize, sqsize);
       //right
       } else if (totalTheta < CV_PI/2 && totalTheta > (1-p_Settings->rightAngleThres)*CV_PI/2){

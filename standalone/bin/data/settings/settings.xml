@@ -124,10 +124,10 @@
     <val_0>1</val_0>
 </SENSE_LEFTRIGHT>
 <LEFT_ANGLE_THRES>
-    <val_0>0.727778</val_0>
+    <val_0>0.961111</val_0>
 </LEFT_ANGLE_THRES>
 <RIGHT_ANGLE_THRES>
-    <val_0>0.738889</val_0>
+    <val_0>0.95</val_0>
 </RIGHT_ANGLE_THRES>
 <EDGE_DETECTION>
     <val_0>1</val_0>
