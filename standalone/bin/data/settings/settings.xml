@@ -1,7 +1,7 @@
 <QUAD_0_X>0</QUAD_0_X>
-<QUAD_0_Y>0.413655</QUAD_0_Y>
+<QUAD_0_Y>0</QUAD_0_Y>
 <QUAD_1_X>1</QUAD_1_X>
-<QUAD_1_Y>0.411647</QUAD_1_Y>
+<QUAD_1_Y>0</QUAD_1_Y>
 <QUAD_2_X>1</QUAD_2_X>
 <QUAD_2_Y>1</QUAD_2_Y>
 <QUAD_3_X>0</QUAD_3_X>
@@ -16,16 +16,16 @@
     <val_0>0</val_0>
 </LEARN_BACKGROUND>
 <RELEARN>
-    <val_0>0</val_0>
+    <val_0>1</val_0>
 </RELEARN>
 <RELEARN_BACKGROUND>
     <val_0>138.889</val_0>
 </RELEARN_BACKGROUND>
 <THRESHOLD>
-    <val_0>124.667</val_0>
+    <val_0>22.6667</val_0>
 </THRESHOLD>
 <BLOB_TYPE>
-    <val_0>3</val_0>
+    <val_0>2</val_0>
 </BLOB_TYPE>
 <USE_HIGHPASS>
     <val_0>1</val_0>
@@ -34,13 +34,13 @@
     <val_0>200</val_0>
 </HIGHPASS_BLUR>
 <HIGHPASS_NOISE>
-    <val_0>1</val_0>
+    <val_0>2.12778</val_0>
 </HIGHPASS_NOISE>
 <USE_SMOOTHING>
-    <val_0>1</val_0>
+    <val_0>0</val_0>
 </USE_SMOOTHING>
 <SMOOTH_AMOUNT>
-    <val_0>2.5</val_0>
+    <val_0>3.33333</val_0>
 </SMOOTH_AMOUNT>
 <MIN_BLOB>
     <val_0>1.19294</val_0>
@@ -73,7 +73,7 @@
     <val_0>1</val_0>
 </SEND_OSC>
 <OSC_HOST>
-    <val_0>localhost</val_0>
+    <val_0>192.168.1.100</val_0>
 </OSC_HOST>
 <OSC_PORT>
     <val_0>12345</val_0>
@@ -103,7 +103,7 @@
     <val_0>7681</val_0>
 </WS_PORT>
 <USE_KINECT>
-    <val_0>1</val_0>
+    <val_0>0</val_0>
 </USE_KINECT>
 <LEGACY_OSC>
     <val_0>0</val_0>
@@ -115,7 +115,7 @@
     <val_0>1</val_0>
 </TRACK_ARMS>
 <MIN_ARM>
-    <val_0>1.48333</val_0>
+    <val_0>0.680556</val_0>
 </MIN_ARM>
 <MAX_ARM>
     <val_0>0.5</val_0>
@@ -127,17 +127,23 @@
     <val_0>0.961111</val_0>
 </LEFT_ANGLE_THRES>
 <RIGHT_ANGLE_THRES>
-    <val_0>0.95</val_0>
+    <val_0>0.955556</val_0>
 </RIGHT_ANGLE_THRES>
 <EDGE_DETECTION>
     <val_0>1</val_0>
 </EDGE_DETECTION>
 <EDGE_THRES1>
-    <val_0>38.25</val_0>
+    <val_0>140.25</val_0>
 </EDGE_THRES1>
 <EDGE_THRES2>
-    <val_0>19.8333</val_0>
+    <val_0>75.0833</val_0>
 </EDGE_THRES2>
 <DILATATION>
-    <val_0>0</val_0>
+    <val_0>0.944444</val_0>
 </DILATATION>
+<LEFT_HORIZ_THRES>
+    <val_0>-1.3439</val_0>
+</LEFT_HORIZ_THRES>
+<RIGHT_HORIZ_THRES>
+    <val_0>1.25664</val_0>
+</RIGHT_HORIZ_THRES>

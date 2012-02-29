@@ -1,4 +1,4 @@
-#ofxKinect
+ofxKinect
 #ofxWebUI_LAB
 ofxNetwork
 ofxOsc
@@ -13,3 +13,4 @@ ofxContourAnalysis
 ofxXmlSettings
 ofxDirList
 #openTSPS
+ofxVideoRecorder

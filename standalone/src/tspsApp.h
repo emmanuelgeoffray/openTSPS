@@ -2,7 +2,7 @@
 #define _TEST_APP
 
 #include "ofMain.h"
-
+#include "ofxVideoRecorder.h"
 /*********************************************************
     INCLUDES + DEFINES
 *********************************************************/
@@ -10,8 +10,8 @@
     // TSPS core
     #include "ofxTSPS.h"
 
-    #define _USE_LIVE_VIDEO         // comment out to load a movie file
-    //#define USE_CUSTOM_GUI		// uncomment to add a "custom" panel to the gui
+    //#define _USE_LIVE_VIDEO         // comment out to load a movie file
+    #define USE_CUSTOM_GUI		// uncomment to add a "custom" panel to the gui
 	
     // kinect support
     #include "ofxKinect.h"
@@ -88,8 +88,11 @@ class tspsApp : public ofBaseApp, public ofxPersonListener {
 
 
 	ofxTSPSPeopleTracker peopleTracker;
-	    
-    
+	  
+    //video record
+    bool bRecord;
+    bool bRecording;
+    ofxVideoRecorder vidRecorder;
     
 };
 

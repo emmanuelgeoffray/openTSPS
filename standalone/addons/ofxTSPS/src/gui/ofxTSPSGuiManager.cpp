@@ -301,7 +301,7 @@ void ofxTSPSGuiManager::setup(){
 	generalGroup->setShowText(false);
 	
 	panel.addToggle("track arms", "TRACK_ARMS", true);
-	panel.addSlider("minimum arm size (% of view):", "MIN_ARM", 1.f, 0.5f, 30.0f, false);
+	panel.addSlider("minimum arm size (% of view):", "MIN_ARM", 1.f, 0.5f, 3.0f, false);
 	//panel.addSlider("maximum arm size (% of view):", "MAX_ARM", .50f, 0.5f, 100.f, false);
 	//panel.addToggle("ignore nested blobs", "FIND_HOLES", false);
 /*	
@@ -321,6 +321,8 @@ void ofxTSPSGuiManager::setup(){
 	panel.addToggle("track and send right or left direction", "SENSE_LEFTRIGHT", true);
 	panel.addSlider("left angle threshold:", "LEFT_ANGLE_THRES", 0.5, 0.0, 1.0, false);
 	panel.addSlider("right angle threshold:", "RIGHT_ANGLE_THRES", 0.5, 0.0, 1.0, false);
+	panel.addSlider("horizontal left threshold:", "LEFT_HORIZ_THRES", -PI/2, -PI/2, 0.0, false);
+	panel.addSlider("horizontal right threshold:", "RIGHT_HORIZ_THRES", PI/2, PI/2, 0, false);
 /*	
 	guiTypeGroup * haarGroup = panel.addGroup("haar tracking");
 	haarGroup->setBackgroundColor(148,129,85);
@@ -562,6 +564,8 @@ void ofxTSPSGuiManager::update(ofEventArgs &e)
 	p_Settings->bSenseLeftRight = (panel.getValueB("SENSE_LEFTRIGHT"));
 	p_Settings->leftAngleThres = panel.getValueF("LEFT_ANGLE_THRES");
 	p_Settings->rightAngleThres = panel.getValueF("RIGHT_ANGLE_THRES");
+	p_Settings->leftHorizThres = panel.getValueF("LEFT_HORIZ_THRES");
+	p_Settings->rightHorizThres = panel.getValueF("RIGHT_HORIZ_THRES");
   	
 	//update osc stuff
 	p_Settings->bSendOsc = panel.getValueB("SEND_OSC");

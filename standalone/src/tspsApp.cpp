@@ -29,7 +29,7 @@ void tspsApp::setup(){
     bKinectConnected = (kinect.numAvailableDevices() >= 1);
     
     // no kinects connected, let's just try to set up the device
-    if (kinect.numAvailableDevices() < 1 || !peopleTracker.useKinect()){
+    if (kinect.numAvailableDevices() < 1 /*|| !peopleTracker.useKinect()*/){
         kinect.clear();        
         bKinect = false;
         initVideoInput();
@@ -39,7 +39,7 @@ void tspsApp::setup(){
     }
     
   #else
-    vidPlayer.loadMovie("testmovie/capture.avi");
+    vidPlayer.loadMovie("testmovie/videologitechmarignan.avi");
     vidPlayer.play();
     camWidth = vidPlayer.width;
     camHeight = vidPlayer.height;
@@ -73,6 +73,13 @@ void tspsApp::setup(){
 	drawStatus[0] = 0;
 	drawStatus[1] = 0;
 	drawStatus[2] = 0;
+  
+  bRecord = false;
+  if (bRecord){
+    vidRecorder.setup("testMovie.mov", camWidth, camHeight, 22);
+    bRecording = true;
+  }
+
 }
 
 //--------------------------------------------------------------
@@ -99,18 +106,22 @@ void tspsApp::update(){
     }    
     #else
     vidPlayer.idleMovie();
-    bNewFrame = vidPlayer.isFrameNew();
+    bNewFrame = true;//vidPlayer.isFrameNew();
 	#endif
     
 	if (bNewFrame){        
         #ifdef _USE_LIVE_VIDEO
         if ( cameraState == CAMERA_KINECT ){   
-			grayImg.setFromPixels(kinect.getDepthPixels(), kinect.width, kinect.height);
-			colorImg = grayImg;
-            peopleTracker.update(grayImg);
+          //grayImg.setFromPixels(kinect.getDepthPixels(), kinect.width, kinect.height);
+          //colorImg = grayImg;
+          //peopleTracker.update(grayImg);
+          //MOD
+          colorImg.setFromPixels(kinect.getPixels(), kinect.width, kinect.height);
+          peopleTracker.update(colorImg);
         } else {
             colorImg.setFromPixels(vidGrabber.getPixels(), camWidth,camHeight);
             peopleTracker.update(colorImg);
+            if (bRecording) vidRecorder.addFrame(vidGrabber.getPixelsRef());
         }
 	    #else
         colorImg.setFromPixels(vidPlayer.getPixels(), camWidth,camHeight);
@@ -201,6 +212,7 @@ void tspsApp::exit(){
     if ( !cameraState == CAMERA_KINECT){  
     }
     #endif
+    vidRecorder.encodeVideo();
 }
 
 //--------------------------------------------------------------
@@ -225,6 +237,12 @@ void tspsApp::keyPressed  (int key){
 	#ifndef _USE_LIVE_VIDEO
     case 'a':{
 			vidPlayer.firstFrame();
+		} break;
+    case 'q':{
+			vidPlayer.setFrame(vidPlayer.getCurrentFrame()-10);
+		} break;
+    case 's':{
+			vidPlayer.setFrame(vidPlayer.getCurrentFrame()+10);
 		} break;
     case 'p':{
       videoPause =! videoPause;

@@ -176,7 +176,7 @@ class ofxTSPSPeopleTracker : public ofxCvBlobListener {
 		void draw();
 		void draw(int x, int y);
 		void draw(int x, int y, int mode);
-	
+    void drawAngle(float angle);	
 		//callbacks for blob tracking
 	
 		ofxTSPSPerson* personAtIndex(int i);

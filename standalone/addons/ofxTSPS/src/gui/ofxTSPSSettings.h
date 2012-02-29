@@ -103,6 +103,8 @@ public:
   bool    bSenseLeftRight;
   float   leftAngleThres;
   float   rightAngleThres;
+  float   leftHorizThres;
+  float   rightHorizThres;
 	
 	// communication vars
 	bool    bSendOsc;

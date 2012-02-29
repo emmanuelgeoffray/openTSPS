@@ -233,7 +233,7 @@ void ofxTSPSPeopleTracker::trackPeople()
 		
 	//warp background
     //grayImageWarped = grayImage;
-    colorImage = grayImage;
+    //colorImage = grayImage;
     colorImageWarped = colorImage;
     //getQuadSubImage(&colorImage, &colorImageWarped, &p_Settings->quadWarpScaled, 3);
     getQuadSubImage(&grayImage, &grayImageWarped, &p_Settings->quadWarpScaled, 1);
@@ -454,20 +454,24 @@ void ofxTSPSPeopleTracker::trackPeople()
     float totalCos = 0;
     float totalSin = 0;
     totalTheta = 0;
+    int nbofValidLines = 0;
     cout << "Thetas: ";
     for( int i = 0; i < MIN(lines->total,10000); i++ ) {
       float* line = (float*)cvGetSeqElem(lines,i);
       float theta = line[1];
       totalSin += sin(theta);
       totalCos += cos(theta);
-      cout << theta << " |";
       theta = (theta > CV_PI/2) ? theta -CV_PI : theta;
-      totalTheta += theta;
+      if (theta > p_Settings->leftHorizThres && theta < p_Settings->rightHorizThres){
+        cout << theta << " |";
+        totalTheta += theta;
+        nbofValidLines++;
+      }
     }
     cout << endl;
-    totalSin/= MIN(lines->total,10000);
-    totalCos/= MIN(lines->total,10000);
-    totalTheta/= MIN(lines->total,10000);
+    totalSin/= nbofValidLines;//sMIN(lines->total,10000);
+    totalCos/= nbofValidLines;//MIN(lines->total,10000);
+    totalTheta/= nbofValidLines;//MIN(lines->total,10000);
     cout << "Total Theta: " << totalTheta << endl;
     //totalTheta = atan2(totalSin,totalCos);
     //cout << "Total ThetaTan: " << totalTheta << endl;
@@ -857,79 +861,59 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
       float* line = (float*)cvGetSeqElem(lines,i);
       float r = line[0];
       float theta = line[1];
-      CvPoint pt1, pt2;
-      double cos0 = cos(theta), sin0 = sin(theta);
-      double rcos0 = r*cos0, rsin0 = r*sin0;
-      //pt1.y = 0
-      double a = -rsin0/cos0;
-      pt1.x = cvRound(rcos0 - a*sin0);
-      pt1.y = cvRound(rsin0 + a*cos0);
-      //unless it's out of screen
-      if (pt1.x < 0){
-        a = rcos0/sin0;
-      } else if (pt1.x > width){
-        a = (rcos0 - width)/sin0;
+      theta = (theta > CV_PI/2) ? theta -CV_PI : theta;
+      if (theta > p_Settings->leftHorizThres && theta < p_Settings->rightHorizThres){
+        theta = (theta < 0) ? theta +CV_PI : theta;
+        CvPoint pt1, pt2;
+        double cos0 = cos(theta), sin0 = sin(theta);
+        double rcos0 = r*cos0, rsin0 = r*sin0;
+        //pt1.y = 0
+        double a = -rsin0/cos0;
+        pt1.x = cvRound(rcos0 - a*sin0);
+        pt1.y = cvRound(rsin0 + a*cos0);
+        //unless it's out of screen
+        if (pt1.x < 0){
+          a = rcos0/sin0;
+        } else if (pt1.x > width){
+          a = (rcos0 - width)/sin0;
+        }
+        pt1.x = cvRound(rcos0 - a*sin0);
+        pt1.y = cvRound(rsin0 + a*cos0);
+        
+        //pt2.y = height
+        a = (height-rsin0)/cos0;
+        pt2.x = cvRound(rcos0 - a*sin0);
+        pt2.y = cvRound(rsin0 + a*cos0);
+         //unless it's out of screen
+        if (pt2.x < 0){
+          a = rcos0/sin0;
+        } else if (pt2.x > width){
+          a = (rcos0 - width)/sin0;
+        }
+        pt2.x = cvRound(rcos0 - a*sin0);
+        pt2.y = cvRound(rsin0 + a*cos0);
+        
+        ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
       }
-      pt1.x = cvRound(rcos0 - a*sin0);
-      pt1.y = cvRound(rsin0 + a*cos0);
-      
-      //pt2.y = height
-      a = (height-rsin0)/cos0;
-      pt2.x = cvRound(rcos0 - a*sin0);
-      pt2.y = cvRound(rsin0 + a*cos0);
-       //unless it's out of screen
-      if (pt2.x < 0){
-        a = rcos0/sin0;
-      } else if (pt2.x > width){
-        a = (rcos0 - width)/sin0;
-      }
-      pt2.x = cvRound(rcos0 - a*sin0);
-      pt2.y = cvRound(rsin0 + a*cos0);
-      
-      ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
     } 
     //red line for average direction
     if (isnormal(totalTheta)){
-      CvPoint pt1, pt2;
-      pt1.x = width/2;
-      pt1.y = height;
-      float r = width/2, theta = totalTheta + (3*CV_PI/2);
-      double cos0 = cos(theta), sin0 = sin(theta);
-      pt2.x = pt1.x + (r * cos0);
-      pt2.y = pt1.y + (r * sin0);
-      if (pt2.y > height){
-        pt2.x = pt1.x - (r * cos0);
-        pt2.y = pt1.y - (r * sin0);
-      }  
       ofSetColor(255, 0, 0);
-      ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
+      drawAngle(totalTheta );
     }
+    
+    //draw horizontals
+    ofSetColor(255, 255, 0);
+    drawAngle(p_Settings->leftHorizThres);
+    drawAngle(p_Settings->rightHorizThres);
+    
     if (p_Settings->bSenseLeftRight){
       //left
-      CvPoint pt1, pt2;
-      pt1.x = width/2;
-      pt1.y = height;
-      float r = width/2, theta = 3*CV_PI/2 + (p_Settings->leftAngleThres*CV_PI/2)+ (3*CV_PI/2);
-      double cos0 = cos(theta), sin0 = sin(theta);
-      pt2.x = pt1.x + (r * cos0);
-      pt2.y = pt1.y + (r * sin0);
-      if (pt2.y > height){
-        pt2.x = pt1.x - (r * cos0);
-        pt2.y = pt1.y - (r * sin0);
-      }  
       ofSetColor(0, 255, 0);
-      ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
+      drawAngle(p_Settings->leftAngleThres*CV_PI/2 + 3*CV_PI);
+
       //right
-      theta = CV_PI/2 - (p_Settings->rightAngleThres*CV_PI/2)+ (3*CV_PI/2);
-      cos0 = cos(theta); sin0 = sin(theta);
-      pt2.x = pt1.x + (r * cos0);
-      pt2.y = pt1.y + (r * sin0);
-      if (pt2.y > height){
-        pt2.x = pt1.x - (r * cos0);
-        pt2.y = pt1.y - (r * sin0);
-      }  
-      ofSetColor(0, 255, 0);
-      ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
+      drawAngle(CV_PI/2 - (p_Settings->rightAngleThres*CV_PI/2)+ (3*CV_PI/2));
 
       //show left or right decision
       int sqsize = 50;
@@ -950,6 +934,22 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
   }
 }
 
+//---------------------------------------------------------------------------
+void ofxTSPSPeopleTracker::drawAngle( float theta ){
+  theta += PI/2;
+  CvPoint pt1, pt2;
+  pt1.x = width/2;
+  pt1.y = height;
+  float r = width/2;
+  double cos0 = cos(theta), sin0 = sin(theta);
+  pt2.x = pt1.x + (r * cos0);
+  pt2.y = pt1.y + (r * sin0);
+  if (pt2.y > height){
+    pt2.x = pt1.x - (r * cos0);
+    pt2.y = pt1.y - (r * sin0);
+  }  
+  ofLine(pt1.x, pt1.y, pt2.x, pt2.y);
+}
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 #pragma mark mouse
