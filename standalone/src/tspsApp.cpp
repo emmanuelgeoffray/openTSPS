@@ -271,7 +271,7 @@ void tspsApp::initVideoInput(){
         
         if ( !cameraState == CAMERA_KINECT){            
             kinect.init();
-            kinect.setVerbose(true);
+            //kinect.setVerbose(true);
             bool bOpened = kinect.open();
             if (bOpened){
                 cameraState = CAMERA_KINECT;
