@@ -245,6 +245,7 @@ void tspsApp::exit(){
     if ( !cameraState == CAMERA_KINECT){  
     }
     #endif
+    stopRecorder();
 }
 
 //--------------------------------------------------------------
