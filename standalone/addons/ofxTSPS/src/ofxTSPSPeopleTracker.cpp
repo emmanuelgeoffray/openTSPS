@@ -203,7 +203,7 @@ void ofxTSPSPeopleTracker::updateSettings()
     //check to enable websockets
     if (p_Settings->bSendWebSockets && !bWebSocketsEnabled){
         setupWebSocket(p_Settings->webSocketPort);
-    } else if (!p_Settings->bSendWebSockets){
+    } else if (!p_Settings->bSendWebSockets && bWebSocketsEnabled){
         bWebSocketsEnabled = false;
         webSocketServer.close();
     }
@@ -455,7 +455,7 @@ void ofxTSPSPeopleTracker::trackPeople()
     float totalSin = 0;
     totalTheta = 0;
     int nbofValidLines = 0;
-    cout << "Thetas: ";
+    //cout << "Thetas: ";
     for( int i = 0; i < MIN(lines->total,10000); i++ ) {
       float* line = (float*)cvGetSeqElem(lines,i);
       float theta = line[1];
@@ -463,16 +463,16 @@ void ofxTSPSPeopleTracker::trackPeople()
       totalCos += cos(theta);
       theta = (theta > CV_PI/2) ? theta -CV_PI : theta;
       if (theta > p_Settings->leftHorizThres && theta < p_Settings->rightHorizThres){
-        cout << theta << " |";
+        //cout << theta << " |";
         totalTheta += theta;
         nbofValidLines++;
       }
     }
-    cout << endl;
+    //cout << endl;
     totalSin/= nbofValidLines;//sMIN(lines->total,10000);
     totalCos/= nbofValidLines;//MIN(lines->total,10000);
     totalTheta/= nbofValidLines;//MIN(lines->total,10000);
-    cout << "Total Theta: " << totalTheta << endl;
+    //cout << "Total Theta: " << totalTheta << endl;
     //totalTheta = atan2(totalSin,totalCos);
     //cout << "Total ThetaTan: " << totalTheta << endl;
   }
@@ -527,10 +527,10 @@ void ofxTSPSPeopleTracker::trackPeople()
   //fishes
   if (p_Settings->bSenseLeftRight && bOscEnabled){
       //left
-      if (totalTheta < 0 && totalTheta < -(1 - p_Settings->leftAngleThres)*CV_PI/2){
+      if (totalTheta < p_Settings->leftAngleThres){
         oscClient.goLeft();
       //right
-      } else if (totalTheta < CV_PI/2 && totalTheta > (1-p_Settings->rightAngleThres)*CV_PI/2){
+      } else if (totalTheta < CV_PI/2 && totalTheta > p_Settings->rightAngleThres){
         oscClient.goRight();
       //straight
       } else {
@@ -910,18 +910,18 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
     if (p_Settings->bSenseLeftRight){
       //left
       ofSetColor(0, 255, 0);
-      drawAngle(p_Settings->leftAngleThres*CV_PI/2 + 3*CV_PI);
+      drawAngle(p_Settings->leftAngleThres);
 
       //right
-      drawAngle(CV_PI/2 - (p_Settings->rightAngleThres*CV_PI/2)+ (3*CV_PI/2));
+      drawAngle(p_Settings->rightAngleThres);
 
       //show left or right decision
       int sqsize = 50;
       //left
-      if (totalTheta < 0 && totalTheta < -(1 - p_Settings->leftAngleThres)*CV_PI/2){
+      if (totalTheta < p_Settings->leftAngleThres){
         ofRect(0, height-sqsize, sqsize, sqsize);
       //right
-      } else if (totalTheta < CV_PI/2 && totalTheta > (1-p_Settings->rightAngleThres)*CV_PI/2){
+      } else if (totalTheta < CV_PI/2 && totalTheta > p_Settings->rightAngleThres){
         ofRect(width-sqsize, height-sqsize, sqsize, sqsize);
       //straight
       } else {

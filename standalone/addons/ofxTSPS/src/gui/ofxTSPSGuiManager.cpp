@@ -319,10 +319,10 @@ void ofxTSPSGuiManager::setup(){
 	leftrightGroup->setShowText(false);
 	//optical flow
 	panel.addToggle("track and send right or left direction", "SENSE_LEFTRIGHT", true);
-	panel.addSlider("left angle threshold:", "LEFT_ANGLE_THRES", 0.5, 0.0, 1.0, false);
-	panel.addSlider("right angle threshold:", "RIGHT_ANGLE_THRES", 0.5, 0.0, 1.0, false);
-	panel.addSlider("horizontal left threshold:", "LEFT_HORIZ_THRES", -PI/2, -PI/2, 0.0, false);
-	panel.addSlider("horizontal right threshold:", "RIGHT_HORIZ_THRES", PI/2, PI/2, 0, false);
+	panel.addSlider("left angle threshold:", "LEFT_ANGLE_THRES", -1*PI/8, -PI/2, 0.0, false);
+	panel.addSlider("right angle threshold:", "RIGHT_ANGLE_THRES", 1*PI/8, 0.0, PI/2,  false);
+	panel.addSlider("horizontal left threshold:", "LEFT_HORIZ_THRES", -3*PI/8, -PI/2, 0.0, false);
+	panel.addSlider("horizontal right threshold:", "RIGHT_HORIZ_THRES", 3*PI/8, 0, PI/2, false);
 /*	
 	guiTypeGroup * haarGroup = panel.addGroup("haar tracking");
 	haarGroup->setBackgroundColor(148,129,85);

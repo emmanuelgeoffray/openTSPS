@@ -1,52 +1,62 @@
-<QUAD_0_X>0</QUAD_0_X>
-<QUAD_0_Y>0</QUAD_0_Y>
-<QUAD_1_X>1</QUAD_1_X>
-<QUAD_1_Y>0</QUAD_1_Y>
-<QUAD_2_X>1</QUAD_2_X>
-<QUAD_2_Y>1</QUAD_2_Y>
-<QUAD_3_X>0</QUAD_3_X>
-<QUAD_3_Y>1</QUAD_3_Y>
+<USE_KINECT>
+    <val_0>0</val_0>
+</USE_KINECT>
 <USE_AMPLIFICATION>
     <val_0>0</val_0>
 </USE_AMPLIFICATION>
 <AMPLIFICATION_AMOUNT>
-    <val_0>31.8</val_0>
+    <val_0>1</val_0>
 </AMPLIFICATION_AMOUNT>
 <LEARN_BACKGROUND>
     <val_0>0</val_0>
 </LEARN_BACKGROUND>
 <RELEARN>
-    <val_0>1</val_0>
+    <val_0>0</val_0>
 </RELEARN>
 <RELEARN_BACKGROUND>
-    <val_0>138.889</val_0>
+    <val_0>0.1</val_0>
 </RELEARN_BACKGROUND>
 <THRESHOLD>
-    <val_0>22.6667</val_0>
+    <val_0>15.5833</val_0>
 </THRESHOLD>
 <BLOB_TYPE>
-    <val_0>2</val_0>
+    <val_0>3</val_0>
 </BLOB_TYPE>
 <USE_HIGHPASS>
-    <val_0>1</val_0>
+    <val_0>0</val_0>
 </USE_HIGHPASS>
 <HIGHPASS_BLUR>
     <val_0>200</val_0>
 </HIGHPASS_BLUR>
 <HIGHPASS_NOISE>
-    <val_0>2.12778</val_0>
+    <val_0>1</val_0>
 </HIGHPASS_NOISE>
 <USE_SMOOTHING>
     <val_0>0</val_0>
 </USE_SMOOTHING>
 <SMOOTH_AMOUNT>
-    <val_0>3.33333</val_0>
+    <val_0>0</val_0>
 </SMOOTH_AMOUNT>
+<EDGE_DETECTION>
+    <val_0>1</val_0>
+</EDGE_DETECTION>
+<EDGE_THRES1>
+    <val_0>70</val_0>
+</EDGE_THRES1>
+<EDGE_THRES2>
+    <val_0>200</val_0>
+</EDGE_THRES2>
+<DILATATION>
+    <val_0>0</val_0>
+</DILATATION>
+<TRACK_BLOBS>
+    <val_0>0</val_0>
+</TRACK_BLOBS>
 <MIN_BLOB>
-    <val_0>1.19294</val_0>
+    <val_0>1</val_0>
 </MIN_BLOB>
 <MAX_BLOB>
-    <val_0>78.355</val_0>
+    <val_0>0.5</val_0>
 </MAX_BLOB>
 <FIND_HOLES>
     <val_0>0</val_0>
@@ -58,10 +68,10 @@
     <val_0>0</val_0>
 </SENSE_OPTICAL_FLOW>
 <MIN_OPTICAL_FLOW>
-    <val_0>5</val_0>
+    <val_0>0</val_0>
 </MIN_OPTICAL_FLOW>
 <MAX_OPTICAL_FLOW>
-    <val_0>106.833</val_0>
+    <val_0>10</val_0>
 </MAX_OPTICAL_FLOW>
 <SENSE_HAAR>
     <val_0>0</val_0>
@@ -69,15 +79,39 @@
 <HAAR_PADDING>
     <val_0>0</val_0>
 </HAAR_PADDING>
-<SEND_OSC>
+<TRACK_ARMS>
     <val_0>1</val_0>
+</TRACK_ARMS>
+<MIN_ARM>
+    <val_0>2.86111</val_0>
+</MIN_ARM>
+<SENSE_LEFTRIGHT>
+    <val_0>1</val_0>
+</SENSE_LEFTRIGHT>
+<LEFT_ANGLE_THRES>
+    <val_0>-0.18326</val_0>
+</LEFT_ANGLE_THRES>
+<RIGHT_ANGLE_THRES>
+    <val_0>0.191986</val_0>
+</RIGHT_ANGLE_THRES>
+<LEFT_HORIZ_THRES>
+    <val_0>-1.37008</val_0>
+</LEFT_HORIZ_THRES>
+<RIGHT_HORIZ_THRES>
+    <val_0>1.37008</val_0>
+</RIGHT_HORIZ_THRES>
+<SEND_OSC>
+    <val_0>0</val_0>
 </SEND_OSC>
 <OSC_HOST>
-    <val_0>192.168.1.100</val_0>
+    <val_0>127.0.0.1</val_0>
 </OSC_HOST>
 <OSC_PORT>
-    <val_0>12345</val_0>
+    <val_0>12000</val_0>
 </OSC_PORT>
+<LEGACY_OSC>
+    <val_0>0</val_0>
+</LEGACY_OSC>
 <SEND_TUIO>
     <val_0>0</val_0>
 </SEND_TUIO>
@@ -91,59 +125,19 @@
     <val_0>0</val_0>
 </SEND_TCP>
 <TCP_PORT>
-    <val_0>3335</val_0>
+    <val_0>8888</val_0>
 </TCP_PORT>
-<ADJUSTED_VIEW_COLOR>
-    <val_0>0</val_0>
-</ADJUSTED_VIEW_COLOR>
 <SEND_WS>
-    <val_0>1</val_0>
+    <val_0>0</val_0>
 </SEND_WS>
 <WS_PORT>
     <val_0>7681</val_0>
 </WS_PORT>
-<USE_KINECT>
-    <val_0>0</val_0>
-</USE_KINECT>
-<LEGACY_OSC>
-    <val_0>0</val_0>
-</LEGACY_OSC>
-<TRACK_BLOBS>
-    <val_0>0</val_0>
-</TRACK_BLOBS>
-<TRACK_ARMS>
-    <val_0>1</val_0>
-</TRACK_ARMS>
-<MIN_ARM>
-    <val_0>0.680556</val_0>
-</MIN_ARM>
-<MAX_ARM>
-    <val_0>0.5</val_0>
-</MAX_ARM>
-<SENSE_LEFTRIGHT>
-    <val_0>1</val_0>
-</SENSE_LEFTRIGHT>
-<LEFT_ANGLE_THRES>
-    <val_0>0.961111</val_0>
-</LEFT_ANGLE_THRES>
-<RIGHT_ANGLE_THRES>
-    <val_0>0.955556</val_0>
-</RIGHT_ANGLE_THRES>
-<EDGE_DETECTION>
-    <val_0>1</val_0>
-</EDGE_DETECTION>
-<EDGE_THRES1>
-    <val_0>140.25</val_0>
-</EDGE_THRES1>
-<EDGE_THRES2>
-    <val_0>75.0833</val_0>
-</EDGE_THRES2>
-<DILATATION>
-    <val_0>0.944444</val_0>
-</DILATATION>
-<LEFT_HORIZ_THRES>
-    <val_0>-1.3439</val_0>
-</LEFT_HORIZ_THRES>
-<RIGHT_HORIZ_THRES>
-    <val_0>1.25664</val_0>
-</RIGHT_HORIZ_THRES>
+<QUAD_0_X>0</QUAD_0_X>
+<QUAD_0_Y>0</QUAD_0_Y>
+<QUAD_1_X>1</QUAD_1_X>
+<QUAD_1_Y>0</QUAD_1_Y>
+<QUAD_2_X>1</QUAD_2_X>
+<QUAD_2_Y>1</QUAD_2_Y>
+<QUAD_3_X>0</QUAD_3_X>
+<QUAD_3_Y>1</QUAD_3_Y>

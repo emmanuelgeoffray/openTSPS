@@ -36,7 +36,7 @@ class tspsApp : public ofBaseApp, public ofxPersonListener {
 		void setup();
 		void update();
 		void draw();
-        void exit();
+    void exit();
 		
 		void keyPressed  (int key);
 		void mouseMoved(int x, int y );
@@ -66,7 +66,8 @@ class tspsApp : public ofBaseApp, public ofxPersonListener {
 		  ofVideoPlayer 		vidPlayer;
       bool              videoPause;
 		#endif
-	
+	  void setupRecorder();
+	  void stopRecorder();
         void initVideoInput();
         void closeVideoInput();
     

@@ -74,12 +74,45 @@ void tspsApp::setup(){
 	drawStatus[1] = 0;
 	drawStatus[2] = 0;
   
-  bRecord = false;
+  bRecord = true;
   if (bRecord){
-    vidRecorder.setup("testMovie.mov", camWidth, camHeight, 22);
-    bRecording = true;
+    setupRecorder();
   }
 
+}
+
+//--------------------------------------------------------------
+void tspsApp::stopRecorder(){
+    if (bRecording){
+      vidRecorder.encodeVideo();
+      bRecording = false;
+    } 
+}
+
+//--------------------------------------------------------------
+void tspsApp::setupRecorder(){
+  //create dir
+  ofDirectory* dir = new ofDirectory("testMovies");
+  if (!dir->exists()) dir->create();
+  if (dir != NULL) delete dir;
+
+  //seek an available filename, ie. movie0059.mov
+  ofFile* file = NULL;
+  int fileNb = 0;
+  string filename = "testMovies/movie" + ofToString(fileNb) + ".mov";
+  file = new ofFile(filename);
+  while (file->exists()){
+    fileNb++;
+    filename = "testMovies/movie" + ofToString(fileNb) + ".mov";
+    if (file != NULL) delete file;
+    file = new ofFile(filename);
+  }
+  if (file != NULL) delete file;
+  
+  //setup recorder with filename
+  vidRecorder.setup(filename, camWidth, camHeight, 22);
+  bRecording = true;
+  cout << "Start recording to file " << filename << endl;
 }
 
 //--------------------------------------------------------------
@@ -212,7 +245,6 @@ void tspsApp::exit(){
     if ( !cameraState == CAMERA_KINECT){  
     }
     #endif
-    vidRecorder.encodeVideo();
 }
 
 //--------------------------------------------------------------
@@ -223,6 +255,9 @@ void tspsApp::keyPressed  (int key){
 		} break;
 		case 'f':{
 			ofToggleFullscreen();
+		} break;
+		case 'r':{
+			(bRecording)? stopRecorder() : setupRecorder();
 		} break;
 		case OF_KEY_LEFT:{
 			peopleTracker.goLeft();
