@@ -42,10 +42,11 @@ Compiling Linux
 1. git clone https://github.com/openframeworks/openFrameworks.git
 2. cd openFrameworks/addons/ 
 3. git clone git@github.com:manuelgeoffray/openTSPS.git
-3. cd openFrameworks/scripts/linux/ubuntu/; sudo sh install_dependencies.sh
-4. sudo apt-get install libusb-1.0-0-dev
-5. git clone git://git.warmcat.com/libwebsockets
-6. ./configure; sudo make install
-7. sudo mv /usr/local/lib/libwebsockets.* /usr/lib/
-8. cd openFrameworks/addons/openTSPS/standalone/; make
-8. cd bin; ./standalone
+4. git clone https://github.com/timscaffidi/ofxVideoRecorder.git
+5. cd openFrameworks/scripts/linux/ubuntu/; sudo sh install_dependencies.sh
+6. sudo apt-get install libusb-1.0-0-dev
+7. git clone git://git.warmcat.com/libwebsockets
+8. ./configure; sudo make install
+9. sudo mv /usr/local/lib/libwebsockets.* /usr/lib/
+10. cd openFrameworks/addons/openTSPS/standalone/; make
+11. cd bin; ./standalone
