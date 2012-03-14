@@ -34,4 +34,4 @@ USER_LIBS = -lusb-1.0 -lwebsockets -L/usr/local/lib
 USER_COMPILER_OPTIMIZATION = -march=native -mtune=native -Os
 
 
-EXCLUDE_FROM_SOURCE="addons/ofxKinect,addons/ofxMSAInteractiveObject/example,addons/ofxKinect/libs/libusb/win,addons/ofxFileDialog,bin,.xcodeproj,obj,.git"
+EXCLUDE_FROM_SOURCE="addons/ofxMSAInteractiveObject/example,addons/ofxKinect/libs/libusb/win,addons/ofxFileDialog,bin,.xcodeproj,obj,.git"
