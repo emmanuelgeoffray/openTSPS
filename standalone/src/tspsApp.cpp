@@ -39,7 +39,7 @@ void tspsApp::setup(){
     }
     
   #else
-    vidPlayer.loadMovie("testmovie/videologitechmarignan.avi");
+    vidPlayer.loadMovie("testMovies/movie25.mov");
     vidPlayer.play();
     camWidth = vidPlayer.width;
     camHeight = vidPlayer.height;
@@ -110,7 +110,7 @@ void tspsApp::setupRecorder(){
   if (file != NULL) delete file;
   
   //setup recorder with filename
-  vidRecorder.setup(filename, camWidth, camHeight, 22);
+  vidRecorder.setup(filename, camWidth, camHeight, 40);
   bRecording = true;
   cout << "Start recording to file " << filename << endl;
 }

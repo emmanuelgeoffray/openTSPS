@@ -89,10 +89,10 @@
     <val_0>1</val_0>
 </SENSE_LEFTRIGHT>
 <LEFT_ANGLE_THRES>
-    <val_0>-0.191986</val_0>
+    <val_0>-0.122173</val_0>
 </LEFT_ANGLE_THRES>
 <RIGHT_ANGLE_THRES>
-    <val_0>0.174533</val_0>
+    <val_0>0.0698132</val_0>
 </RIGHT_ANGLE_THRES>
 <LEFT_HORIZ_THRES>
     <val_0>-0.671952</val_0>
