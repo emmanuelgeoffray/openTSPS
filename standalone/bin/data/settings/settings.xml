@@ -14,22 +14,22 @@
     <val_0>0</val_0>
 </RELEARN>
 <RELEARN_BACKGROUND>
-    <val_0>0.1</val_0>
+    <val_0>166</val_0>
 </RELEARN_BACKGROUND>
 <THRESHOLD>
-    <val_0>15.5833</val_0>
+    <val_0>12</val_0>
 </THRESHOLD>
 <BLOB_TYPE>
-    <val_0>3</val_0>
+    <val_0>0</val_0>
 </BLOB_TYPE>
 <USE_HIGHPASS>
-    <val_0>0</val_0>
+    <val_0>1</val_0>
 </USE_HIGHPASS>
 <HIGHPASS_BLUR>
-    <val_0>200</val_0>
+    <val_0>43</val_0>
 </HIGHPASS_BLUR>
 <HIGHPASS_NOISE>
-    <val_0>1</val_0>
+    <val_0>3</val_0>
 </HIGHPASS_NOISE>
 <USE_SMOOTHING>
     <val_0>0</val_0>
@@ -38,7 +38,7 @@
     <val_0>0</val_0>
 </SMOOTH_AMOUNT>
 <EDGE_DETECTION>
-    <val_0>1</val_0>
+    <val_0>0</val_0>
 </EDGE_DETECTION>
 <EDGE_THRES1>
     <val_0>70</val_0>
@@ -50,13 +50,13 @@
     <val_0>0</val_0>
 </DILATATION>
 <TRACK_BLOBS>
-    <val_0>0</val_0>
+    <val_0>1</val_0>
 </TRACK_BLOBS>
 <MIN_BLOB>
-    <val_0>1</val_0>
+    <val_0>0.001</val_0>
 </MIN_BLOB>
 <MAX_BLOB>
-    <val_0>0.5</val_0>
+    <val_0>0.001</val_0>
 </MAX_BLOB>
 <FIND_HOLES>
     <val_0>0</val_0>
@@ -68,10 +68,10 @@
     <val_0>0</val_0>
 </SENSE_OPTICAL_FLOW>
 <MIN_OPTICAL_FLOW>
-    <val_0>0</val_0>
+    <val_0>4</val_0>
 </MIN_OPTICAL_FLOW>
 <MAX_OPTICAL_FLOW>
-    <val_0>10</val_0>
+    <val_0>200</val_0>
 </MAX_OPTICAL_FLOW>
 <SENSE_HAAR>
     <val_0>0</val_0>
@@ -80,34 +80,34 @@
     <val_0>0</val_0>
 </HAAR_PADDING>
 <TRACK_ARMS>
-    <val_0>1</val_0>
+    <val_0>0</val_0>
 </TRACK_ARMS>
 <MIN_ARM>
-    <val_0>2.86111</val_0>
+    <val_0>0.5</val_0>
 </MIN_ARM>
 <SENSE_LEFTRIGHT>
-    <val_0>1</val_0>
+    <val_0>0</val_0>
 </SENSE_LEFTRIGHT>
 <LEFT_ANGLE_THRES>
-    <val_0>-0.18326</val_0>
+    <val_0>-0</val_0>
 </LEFT_ANGLE_THRES>
 <RIGHT_ANGLE_THRES>
-    <val_0>0.191986</val_0>
+    <val_0>0</val_0>
 </RIGHT_ANGLE_THRES>
 <LEFT_HORIZ_THRES>
-    <val_0>-1.37008</val_0>
+    <val_0>-0.846485</val_0>
 </LEFT_HORIZ_THRES>
 <RIGHT_HORIZ_THRES>
-    <val_0>1.37008</val_0>
+    <val_0>1</val_0>
 </RIGHT_HORIZ_THRES>
 <SEND_OSC>
-    <val_0>0</val_0>
+    <val_0>1</val_0>
 </SEND_OSC>
 <OSC_HOST>
     <val_0>127.0.0.1</val_0>
 </OSC_HOST>
 <OSC_PORT>
-    <val_0>12000</val_0>
+    <val_0>12345</val_0>
 </OSC_PORT>
 <LEGACY_OSC>
     <val_0>0</val_0>
@@ -135,9 +135,9 @@
 </WS_PORT>
 <QUAD_0_X>0</QUAD_0_X>
 <QUAD_0_Y>0</QUAD_0_Y>
-<QUAD_1_X>1</QUAD_1_X>
+<QUAD_1_X>0</QUAD_1_X>
 <QUAD_1_Y>0</QUAD_1_Y>
-<QUAD_2_X>1</QUAD_2_X>
+<QUAD_2_X>0</QUAD_2_X>
 <QUAD_2_Y>1</QUAD_2_Y>
 <QUAD_3_X>0</QUAD_3_X>
 <QUAD_3_Y>1</QUAD_3_Y>

@@ -790,10 +790,11 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
         //purple optical flow arrow
         ofSetHexColor(0xff00ff);
         //JG Doesn't really provide any helpful information since its so scattered
-  //			ofLine(p->centroid.x, 
-  //				   p->centroid.y, 
-  //				   p->centroid.x + p->opticalFlowVectorAccumulation.x, 
-  //				   p->centroid.y + p->opticalFlowVectorAccumulation.y);
+        //p->opticalFlowVectorAccumulation /= 100;
+  			ofLine(p->centroid.x, 
+  				   p->centroid.y, 
+  				   p->centroid.x + p->opticalFlowVectorAccumulation.x, 
+  				   p->centroid.y + p->opticalFlowVectorAccumulation.y);
       }
       
       ofSetHexColor(0xffffff);							

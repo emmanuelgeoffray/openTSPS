@@ -39,7 +39,7 @@ void tspsApp::setup(){
     }
     
   #else
-    vidPlayer.loadMovie("testmovie/videologitechmarignan.avi");
+    vidPlayer.loadMovie("testMovies/movie20.mov");
     vidPlayer.play();
     camWidth = vidPlayer.width;
     camHeight = vidPlayer.height;
@@ -74,7 +74,7 @@ void tspsApp::setup(){
 	drawStatus[1] = 0;
 	drawStatus[2] = 0;
   
-  bRecord = true;
+  bRecord = false;
   if (bRecord){
     setupRecorder();
   }

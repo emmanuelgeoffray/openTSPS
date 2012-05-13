@@ -246,8 +246,8 @@ void ofxTSPSGuiManager::setup(){
 	
 	//JG 12/8/09 GUI-REDUX Removing this feature
 	panel.addToggle("track blobs", "TRACK_BLOBS", true);
-	panel.addSlider("minimum blob size (% of view):", "MIN_BLOB", 1.f, 0.01f, 2.0f, false);
-	panel.addSlider("maximum blob size (% of view):", "MAX_BLOB", .50f, 0.1f, 100.f, false);
+	panel.addSlider("minimum blob size (% of view):", "MIN_BLOB", 0.001, 0.001, 0.300, false);
+	panel.addSlider("maximum blob size (% of view):", "MAX_BLOB", 0.001, 0.001, 0.300, false);
 	panel.addToggle("ignore nested blobs", "FIND_HOLES", false);
 	
 	guiTypeGroup * optionsGroup = panel.addGroup("options");

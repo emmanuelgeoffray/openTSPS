@@ -10,8 +10,8 @@
     // TSPS core
     #include "ofxTSPS.h"
 
-    #define _USE_LIVE_VIDEO         // comment out to load a movie file
     #define USE_CUSTOM_GUI		// uncomment to add a "custom" panel to the gui
+   // #define _USE_LIVE_VIDEO         // comment out to load a movie file
 	
     // kinect support
     #include "ofxKinect.h"
