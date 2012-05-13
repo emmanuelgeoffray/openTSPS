@@ -594,7 +594,16 @@ void ofxTSPSGuiManager::update(ofEventArgs &e)
 	for (int i=0; i<4; i++){
 		p_Settings->quadWarpScaled[i] = scaledPoints[i];
 	}
-	
+  /*
+  //stairs
+  for (int i = 0; i < stairs.size(); i++){
+    scaledPoints = stairs[i].getScaledQuadPoints(cameraWidth,cameraHeight);
+    for (int i=0; i<4; i++){
+      p_Settings->stairsScaled[i] = scaledPoints[i];
+    }
+  }
+  */
+
 	//modify custom parameters
 	vector<ofxTSPSGUICustomParam>::iterator it;
 	for(it = params.begin(); it != params.end(); it++){
@@ -627,6 +636,7 @@ void ofxTSPSGuiManager::update(ofEventArgs &e)
 
 void ofxTSPSGuiManager::setupQuadGui ( int _cameraWidth, int _cameraHeight )
 {
+  quadGui.setup("QUAD_");
 	cameraWidth = _cameraWidth;
 	cameraHeight = _cameraHeight;
 	ofxTSPSSettings *p_Settings;
@@ -655,6 +665,35 @@ void ofxTSPSGuiManager::setupQuadGui ( int _cameraWidth, int _cameraHeight )
 	quadGuiSetup = true;
 };
 
+void ofxTSPSGuiManager::setupStairs ( int _cameraWidth, int _cameraHeight )
+{
+	cameraWidth = _cameraWidth;
+	cameraHeight = _cameraHeight;
+	ofxTSPSSettings *p_Settings;
+	p_Settings = ofxTSPSSettings::getInstance();
+  int size = 17;
+  p_Settings->stairs.resize(size);
+  for (unsigned int i = 0; i < p_Settings->stairs.size(); i++){
+    // give the gui quad a starting setting
+    p_Settings->stairs[i].setup("STAIR" + ofToString(i)+"_");
+    
+    ofPoint quadSrc[4];
+    quadSrc[0].set(0, (i+0.1)/(float)size);
+    quadSrc[1].set(1, (i+0.1)/(float)size);
+    quadSrc[2].set(1, (i+1)/(float)size);
+    quadSrc[3].set(0, (i+1)/(float)size);
+    p_Settings->stairs[i].setQuadPoints(quadSrc);
+    
+    
+    //BR TO DO: add this into the normal settings file
+    p_Settings->stairs[i].width = cameraWidth;
+    p_Settings->stairs[i].height = cameraHeight;
+    p_Settings->stairs[i].disableAppEvents();
+    //p_Settings->stairs[i].bCameraView = true;
+	}
+	//quadGuiSetup = true;
+};
+
 void ofxTSPSGuiManager::drawQuadGui(){
 	quadGui.draw();
 };
@@ -666,11 +705,33 @@ void ofxTSPSGuiManager::drawQuadGui( int x, int y, int width, int height ){
 	drawQuadGui();
 };
 
+void ofxTSPSGuiManager::drawStairs( int x, int y, int width, int height ){
+	ofxTSPSSettings *p_Settings;
+	p_Settings = ofxTSPSSettings::getInstance();
+  int red[] = {255,  255, 255, 0, 0,   0};
+  int green[] = {255, 255, 0,   0, 0,   255};
+  int blue[] = {255,  0,   0,   0, 255, 255};
+	for (int i = 0; i < p_Settings->stairs.size(); i ++){
+    p_Settings->stairs[i].x = x;
+    p_Settings->stairs[i].y = y;
+    p_Settings->stairs[i].setScale((float) width/p_Settings->stairs[i].width, (float) height/p_Settings->stairs[i].height );
+    p_Settings->stairs[i].draw(x, y, (float) width, (float) height, red[i%6], green[i%6], blue[i%6], 1);
+  }
+};
+
 
 // ZACK BOKA: Added so the quadGui instance can know when image warping is allowed to occur
 //            (i.e., the image can only get warped when in Camera View).
 void ofxTSPSGuiManager::changeGuiCameraView(bool bCameraView) {
 	quadGui.bCameraView = bCameraView;
+};
+void ofxTSPSGuiManager::changeGuiAdjustedView(bool bAdjustedView) {
+	ofxTSPSSettings *p_Settings;
+	p_Settings = ofxTSPSSettings::getInstance();
+
+	for (int i = 0; i < p_Settings->stairs.size(); i++){
+    p_Settings->stairs[i].bCameraView = bAdjustedView;
+  }
 };
 
 
@@ -703,12 +764,18 @@ void ofxTSPSGuiManager::saveEventCatcher( string & buttonName){
 	p_Settings = ofxTSPSSettings::getInstance();
 	p_Settings->currentXmlFile = panel.getCurrentXMLFile();
 	quadGui.saveToFile(p_Settings->currentXmlFile);
+  for (unsigned int i = 0; i < p_Settings->stairs.size(); i++){
+    p_Settings->stairs[i].saveToFile(p_Settings->currentXmlFile);
+  }
 };
 
 void ofxTSPSGuiManager::reloadEventCatcher( string & buttonName){
 	ofxTSPSSettings *p_Settings;
 	p_Settings = ofxTSPSSettings::getInstance();
 	quadGui.readFromFile(p_Settings->currentXmlFile);
+  for (unsigned int i = 0; i < p_Settings->stairs.size(); i++){
+    p_Settings->stairs[i].readFromFile(p_Settings->currentXmlFile);
+  }
 };
 
 void ofxTSPSGuiManager::loadEventCatcher( string & buttonName){
@@ -716,6 +783,9 @@ void ofxTSPSGuiManager::loadEventCatcher( string & buttonName){
 	p_Settings = ofxTSPSSettings::getInstance();
 	p_Settings->currentXmlFile = panel.getCurrentXMLFile();
 	quadGui.readFromFile(p_Settings->currentXmlFile);
+  for (unsigned int i = 0; i < p_Settings->stairs.size(); i++){
+    p_Settings->stairs[i].readFromFile(p_Settings->currentXmlFile);
+  }
 };
 
 void ofxTSPSGuiManager::saveAsEventCatcher( string & buttonName){
@@ -723,6 +793,9 @@ void ofxTSPSGuiManager::saveAsEventCatcher( string & buttonName){
 	p_Settings = ofxTSPSSettings::getInstance();
 	p_Settings->currentXmlFile = panel.getCurrentXMLFile();
 	quadGui.readFromFile(p_Settings->currentXmlFile);
+  for (unsigned int i = 0; i < p_Settings->stairs.size(); i++){
+    p_Settings->stairs[i].readFromFile(p_Settings->currentXmlFile);
+  }
 };
 
 /***************************************************************
@@ -756,6 +829,11 @@ void ofxTSPSGuiManager::mouseReleased(ofMouseEventArgs &e)
 void ofxTSPSGuiManager::loadSettings( string xmlFile ){
 	panel.loadSettings(xmlFile);	
 	if (quadGuiSetup) quadGui.readFromFile(xmlFile);	
+	ofxTSPSSettings *p_Settings;
+	p_Settings = ofxTSPSSettings::getInstance();
+  for (unsigned int i = 0; i < p_Settings->stairs.size(); i++){
+    p_Settings->stairs[i].readFromFile(xmlFile);
+  }
 };
 
 void ofxTSPSGuiManager::keyPressed(ofKeyEventArgs &e)

@@ -26,19 +26,19 @@
 
 //----------------------------------------------------
 ofxCvCoordWarpingGui::ofxCvCoordWarpingGui(){
-	selected = -1;
-	quadName = "QUAD_";
-	scale.x = scale.y = 1.0f;
-	bAutoSave = false;
-	ofAddListener(ofEvents.mousePressed, this, &ofxCvCoordWarpingGui::_mousePressed);
-	ofAddListener(ofEvents.mouseReleased, this, &ofxCvCoordWarpingGui::_mouseReleased);
-	ofAddListener(ofEvents.mouseDragged, this, &ofxCvCoordWarpingGui::_mouseDragged);
 }
 
 //----------------------------------------------------
 void ofxCvCoordWarpingGui::setup(string _quadName){
 	quadName = _quadName;
 	bCameraView = false;	
+	selected = -1;
+	scale.x = scale.y = 1.0f;
+	bAutoSave = false;
+	ofAddListener(ofEvents.mousePressed, this, &ofxCvCoordWarpingGui::_mousePressed);
+	ofAddListener(ofEvents.mouseReleased, this, &ofxCvCoordWarpingGui::_mouseReleased);
+	ofAddListener(ofEvents.mouseDragged, this, &ofxCvCoordWarpingGui::_mouseDragged);
+
 }
 
 //----------------------------------------------------
@@ -82,10 +82,9 @@ void ofxCvCoordWarpingGui::loadSettings(){
 		// "QUAD_SRC_1" etc...
 		
 		str = quadName;
-		str += ofToString(i);									
-		
-		srcZeroToOne[i].x = xml.getValue(str+"_X", srcZeroToOne[i].x);
-		srcZeroToOne[i].y = xml.getValue(str+"_Y", srcZeroToOne[i].y);		
+		str += ofToString(i);					
+		srcZeroToOne[i].x = xml.getValue(str+"_X", (double)srcZeroToOne[i].x);
+		srcZeroToOne[i].y = xml.getValue(str+"_Y", (double)srcZeroToOne[i].y);		
 		
 		if(srcZeroToOne[i].x > 1) srcZeroToOne[i].x = 1;
 		if(srcZeroToOne[i].y > 1) srcZeroToOne[i].y = 1;
@@ -255,7 +254,7 @@ void ofxCvCoordWarpingGui::draw(float passedX, float passedY, float scaleWidth, 
 		ofSetRectMode(OF_RECTMODE_CORNER);
 		ofFill();
 
-		ofSetColor(255,255,255,50);
+		ofSetColor(255,255,255,0);//transparency here
 		ofSetPolyMode(OF_POLY_WINDING_ODD);
 		ofBeginShape();
 			ofVertex(0, 0);
@@ -292,7 +291,7 @@ void ofxCvCoordWarpingGui::draw(){
 
 //----------------------------------------------------
 void ofxCvCoordWarpingGui::_mousePressed(ofMouseEventArgs &e){
-	if (bCameraView) selectPoint(e.x, e.y, x, y, width*scale.y, height*scale.y, 40);
+	if (bCameraView) selectPoint(e.x, e.y, x, y, width*scale.y, height*scale.y, 10);
 }
 
 //----------------------------------------------------

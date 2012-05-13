@@ -94,6 +94,17 @@ void ofxTSPSOscSender::goStraight(){
   send(m2);
 };
 
+void ofxTSPSOscSender::newStair(int number, ofPoint* quad){
+  ofxOscMessage m;
+  m.setAddress( "/TSPS/stair/" );
+  m.addIntArg( number );
+  for (int i = 0; i < 4; i++){
+    m.addFloatArg( quad[i].x);
+    m.addFloatArg( quad[i].y);
+  }
+  send(m);
+};
+
 void ofxTSPSOscSender::personEntered ( ofxTSPSPerson * p, ofPoint centroid, int cameraWidth, int cameraHeight, bool bSendContours ){
 	ofxOscMessage m;
 

@@ -50,6 +50,7 @@ class ofxTSPSOscSender : public ofxOscSender
 	ofxTSPSOscSender(string _ip, int _port);
 	void setupSender(string _ip, int _port);
 	void update();
+  void newStair(int number, ofPoint* quad);
 	void personEntered ( ofxTSPSPerson * p, ofPoint centroid, int cameraWidth, int cameraHeight, bool sendContours = false );
 	void personMoved ( ofxTSPSPerson * p, ofPoint centroid, int cameraWidth, int cameraHeight, bool sendContours = false );
 	void personUpdated ( ofxTSPSPerson * p, ofPoint centroid, int cameraWidth, int cameraHeight, bool sendContours = false );

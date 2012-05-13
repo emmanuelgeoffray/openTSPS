@@ -56,6 +56,7 @@ void ofxTSPSPeopleTracker::setup(int w, int h)
 	//setup gui quad in manager
 	gui.setup();
 	gui.setupQuadGui( width, height );
+	gui.setupStairs( width, height );
 	gui.loadSettings("settings/settings.xml");
 	activeHeight = ofGetHeight();
 	activeWidth = ofGetWidth();
@@ -215,6 +216,11 @@ void ofxTSPSPeopleTracker::updateSettings()
 		gui.changeGuiCameraView(true);
 	} else {
 		gui.changeGuiCameraView(false);
+	}
+	if (adjustedView.isActive()) {
+		gui.changeGuiAdjustedView(true);
+	} else {
+		gui.changeGuiAdjustedView(false);
 	}
 }
 
@@ -537,6 +543,10 @@ void ofxTSPSPeopleTracker::trackPeople()
         oscClient.goStraight();
       }
   }
+  //stairs
+  for (unsigned int i = 0; i < p_Settings->stairs.size(); i++){
+    oscClient.newStair(i,  p_Settings->stairs[i].getQuadPoints());
+  }
     
   //setup
 	if(bTuioEnabled){
@@ -701,6 +711,7 @@ void ofxTSPSPeopleTracker::draw(int x, int y, int mode)
 			gui.drawQuadGui( activeView.x, activeView.y, activeView.width, activeView.height );
 		} else if ( activeViewIndex == ADJUSTED_CAMERA_VIEW){
 			adjustedView.drawLarge(activeView.x, activeView.y, activeView.width, activeView.height);				
+			gui.drawStairs( activeView.x, activeView.y, activeView.width, activeView.height );
 		} else if ( activeViewIndex == REFERENCE_BACKGROUND_VIEW){
 			bgView.drawLarge(activeView.x, activeView.y, activeView.width, activeView.height);			
 		} else if ( activeViewIndex == PROCESSED_VIEW){ 
@@ -1331,6 +1342,7 @@ void ofxTSPSPeopleTracker::updateViewRectangles(){
 	dataView.width = smallView.x;
 	dataView.height = smallView.y;	
 	gui.drawQuadGui( activeView.x, activeView.y, activeView.width, activeView.height );
+	gui.drawStairs( activeView.x, activeView.y, activeView.width, activeView.height );
 }
 
 

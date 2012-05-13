@@ -13,6 +13,7 @@ public:
 
 //--------------------------------------------------------------
 void tspsApp::setup(){
+  setlocale(LC_NUMERIC,"C"); //to check
 	ofSetVerticalSync(true);
 	ofSetFrameRate(60);
 	ofBackground(223, 212, 190);

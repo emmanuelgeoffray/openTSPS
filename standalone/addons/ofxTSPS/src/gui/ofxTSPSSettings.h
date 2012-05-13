@@ -34,6 +34,7 @@
 
 #include "ofMain.h"
 #include <iostream>
+#include "ofxCvCoordWarpingGui.h"
 
 enum tspsTrackingType {
 	TRACK_DARK, TRACK_LIGHT, TRACK_ABSOLUTE, NO_DIFFERENCING
@@ -133,6 +134,9 @@ public:
 	vector <ofPoint> quadWarpScaled;
 	vector <ofPoint> quadWarpOriginal;
 	
+  //stairs
+  vector <ofxCvCoordWarpingGui> stairs;
+
 	//xml file
 	vector <string> xmlFiles;
 	string currentXmlFile;

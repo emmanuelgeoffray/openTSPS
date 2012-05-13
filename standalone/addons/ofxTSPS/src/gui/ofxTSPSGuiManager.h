@@ -57,8 +57,10 @@ class ofxTSPSGuiManager {
 
 	bool enableGui;
 	void setupQuadGui ( int cameraWidth, int cameraHeight );
+	void setupStairs ( int cameraWidth, int cameraHeight );
 	void drawQuadGui();
 	void drawQuadGui( int x, int y, int width, int height );
+	void drawStairs( int x, int y, int width, int height );
 
 	void update(ofEventArgs &e);
 	void draw(ofEventArgs &e);
@@ -90,6 +92,7 @@ class ofxTSPSGuiManager {
 	// Added so the quadGui instance can know when image warping is allowed to occur
 	//            (i.e., the image can only get warped when in Camera View).
 	void changeGuiCameraView(bool bCameraView);
+	void changeGuiAdjustedView(bool bAdjustedView);
 	
     // minimize + maximize (should this be here? hmmm)
     void minimize( string & button );
