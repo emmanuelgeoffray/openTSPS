@@ -797,6 +797,14 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
       ofEndShape();
       ofPopStyle();
       
+      //draw velocity
+      ofSetHexColor(0x00ff00);
+      ofLine(p->centroid.x, 
+           p->centroid.y, 
+           p->centroid.x + p->velocity.x, 
+           p->centroid.y + p->velocity.y);
+
+
       if(p_Settings->bTrackOpticalFlow){
         //purple optical flow arrow
         ofSetHexColor(0xff00ff);
@@ -864,6 +872,7 @@ void ofxTSPSPeopleTracker::drawBlobs( float drawWidth, float drawHeight){
     ofSetHexColor(0xffffff);				
     //ofDrawBitmapString("blobs and optical flow", 5, height - 5 );
   }
+  //draw arms
 	if (p_Settings->bTrackArms && lines !=0){
     float scaleVar = (float) drawWidth/width;
     ofPushMatrix();

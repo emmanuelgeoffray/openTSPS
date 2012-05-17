@@ -40,7 +40,7 @@ void tspsApp::setup(){
     }
     
   #else
-    vidPlayer.loadMovie("testMovies/movie20.mov");
+    vidPlayer.loadMovie("testMovies/movie29.mov");
     vidPlayer.play();
     camWidth = vidPlayer.width;
     camHeight = vidPlayer.height;
@@ -141,6 +141,7 @@ void tspsApp::update(){
     #else
     vidPlayer.idleMovie();
     bNewFrame = true;//vidPlayer.isFrameNew();
+    bNewFrame = vidPlayer.isFrameNew();
 	#endif
     
 	if (bNewFrame){        
@@ -274,6 +275,12 @@ void tspsApp::keyPressed  (int key){
 	#ifndef _USE_LIVE_VIDEO
     case 'a':{
 			vidPlayer.firstFrame();
+		} break;
+    case 'w':{
+			vidPlayer.setFrame(vidPlayer.getCurrentFrame()-1);
+		} break;
+    case 'x':{
+			vidPlayer.setFrame(vidPlayer.getCurrentFrame()+1);
 		} break;
     case 'q':{
 			vidPlayer.setFrame(vidPlayer.getCurrentFrame()-10);
