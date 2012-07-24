@@ -22,6 +22,11 @@ void tspsApp::setup(){
   colorImg.allocate(camWidth, camHeight);
   grayImg.allocate(camWidth, camHeight);
 
+  shots.resize(25);
+  for (unsigned int i = 0; i < shots.size(); i++){
+    shots[i].allocate(camWidth, camHeight);
+  }
+
   peopleTracker.setup(camWidth, camHeight);
 
     bKinect         = false;
@@ -166,7 +171,19 @@ void tspsApp::update(){
                 p->depth = p->highest.z / 255.0f;
             }
 		}
+    shotsUpdate();
 	}
+}
+
+//--------------------------------------------------------------
+void tspsApp::shotsUpdate(){
+
+     float opticalFlowLength = peopleTracker.getOpticalFlowInRegion(0, 0, camWidth, camHeight).length();
+    cout << "tspsApp.cpp: optical flow: " << opticalFlowLength << endl;
+    if ( opticalFlowLength > 1000){
+      shots.push_back(colorImg);
+      shots.pop_front();
+    }
 }
 
 //delegate methods for people entering and exiting
@@ -204,12 +221,29 @@ void tspsApp::personUpdated( ofxTSPSPerson* updatedPerson, ofxTSPSScene* scene )
 }
 
 //--------------------------------------------------------------
+void tspsApp::shotsDraw(){
+  float width = camWidth/4;
+  float height = camWidth/4;
+  float verticalSpace = 20;
+  float horizontalSpace = 10;
+  int nbInLine = ofGetWidth()/ (width + horizontalSpace);
+
+  for (int i = 0; i < shots.size(); i++){
+    float posx = (i % nbInLine) * (width + horizontalSpace);
+    float posy = (i / nbInLine) * (height + verticalSpace);
+    shots[i].draw(posx, posy, width, height);
+  }
+
+}
+
+//--------------------------------------------------------------
 void tspsApp::draw(){
 	ofEnableAlphaBlending();
 	ofSetHexColor(0xffffff);
 	ofPushStyle();
 	background.draw(0,0);
-	peopleTracker.draw();
+	//peopleTracker.draw();
+  shotsDraw();
 
 	ofPopStyle();
 

@@ -23,6 +23,7 @@ libs/openFrameworksCompiled/project/*/*.layout
 
 #linux temporary files
 *~
+*.swp
 
 #eclipse build folders
 #Mac OS X

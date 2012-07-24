@@ -1,0 +1,13 @@
+ofxVideoRecorder
+ofxOpenCv
+ofxXmlSettings
+ofxOsc
+ofxNetwork
+ofxLibwebsockets
+ofxKinect
+openTSPS/addons/ofxTSPS
+openTSPS/addons/ofxTuioWrapper
+openTSPS/addons/ofxMSAInteractiveObject
+openTSPS/addons/ofxLabGui
+openTSPS/addons/ofxCvHaarTracker
+openTSPS/addons/ofxOpenCVExtensions
