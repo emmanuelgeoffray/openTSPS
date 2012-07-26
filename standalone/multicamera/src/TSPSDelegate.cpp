@@ -217,7 +217,7 @@ bool TSPSDelegate::initVideoInput( int which ){
         }
             
         kinect.init();
-        kinect.setVerbose(true);
+        //kinect.setVerbose(true);
         ofLog(OF_LOG_VERBOSE, "opening Kinect %d", which);
         bool bOpened = kinect.open( which );
         if (bOpened){
