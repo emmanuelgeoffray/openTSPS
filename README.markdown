@@ -33,6 +33,15 @@ Installing:
     * manually install drivers from openTSPS/drivers/Kinect
     * run openTSPS/openTSPS.exe
 
+* Linux
+
+``` bash
+$ chmod +x clone_addons.sh
+$ ./clone_addons.sh
+$ sh install_dependencies.sh
+```
+
+
 * All platforms
   * make sure to keep the "data" folder next to your app if you move it!  
 
