@@ -4,7 +4,7 @@
 
 cd ../../../addons/
 
-addons=( 'emmanuelgeoffray/ofxLabGui.git' 'kylemcdonald/ofxCv.git' 'labatrockwell/ofxLibwebsockets.git' 'memo/ofxMSAInteractiveObject.git' 'emmanuelgeoffray/ofxNI2.git' 'emmanuelgeoffray/ofxOpenCVExtensions.git' 'labatrockwell/ofxOpenNI.git' 'Spacebrew/ofxSpacebrew.git' 'astellato/ofxSyphon.git' 'emmanuelgeoffray/ofxTSPS.git' 'labatrockwell/ofxTSPSReceiver.git' 'emmanuelgeoffray/ofxTuioWrapper.git')
+addons=( 'emmanuelgeoffray/ofxLabGui.git' 'kylemcdonald/ofxCv.git' 'labatrockwell/ofxLibwebsockets.git' 'memo/ofxMSAInteractiveObject.git' 'emmanuelgeoffray/ofxNI2.git' 'emmanuelgeoffray/ofxOpenCVExtensions.git' 'emmanuelgeoffray/ofxOpenNI.git' 'Spacebrew/ofxSpacebrew.git' 'astellato/ofxSyphon.git' 'emmanuelgeoffray/ofxTSPS.git' 'labatrockwell/ofxTSPSReceiver.git' 'emmanuelgeoffray/ofxTuioWrapper.git')
 
 if [ -z $1 ]; then
     PREFIX="git clone https://github.com/"
