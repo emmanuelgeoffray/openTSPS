@@ -1,6 +1,3 @@
-[submodule "addons/ofxKinect"]
-	path = addons/ofxKinect
-	url = https://github.com/ofTheo/ofxKinect.git
 [submodule "addons/ofxOpenNI"]
 	path = addons/ofxOpenNI
 	url = https://github.com/labatrockwell/ofxOpenNI
@@ -21,7 +18,7 @@
 	url = https://github.com/Spacebrew/ofxSpacebrew.git
 [submodule "addons/ofxSyphon"]
 	path = addons/ofxSyphon
-	url = https://github.com/astellato/ofxSyphon
+	url = https://github.com/astellato/ofxSyphon.git
 [submodule "addons/ofxNI2"]
 	path = addons/ofxNI2
-	url = https://github.com/satoruhiga/ofxNI2.git
+	url = https://github.com/labatrockwell/ofxNI2.git

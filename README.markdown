@@ -8,7 +8,7 @@ There are example TSPS clients in Processing, Javascript, Flash, Quartz composer
 
 Downloads
 ------------
-Because of the now defunct Github downloads, TSPS downloads are not hosted at [Sourceforge](https://sourceforge.net/projects/tsps/files/)
+Because of the now defunct Github downloads, TSPS downloads are hosted at [Sourceforge](https://sourceforge.net/projects/tsps/files/)
 
 Installing:
 ------------
@@ -47,7 +47,7 @@ $ sh install_dependencies.sh
 
 Compiling:
 ------------
-1. clone openframeworks from here: [https://github.com/openframeworks/openFrameworks](https://github.com/openframeworks/openFrameworks )
+1. clone openframeworks 0.8.0 from here: [https://github.com/openframeworks/openFrameworks](https://github.com/openframeworks/openFrameworks )
 2. clone the TSPS directory into openframeworks/
 3. clone all submodules:
 ```

@@ -11,6 +11,7 @@ ofxSpacebrew
 ofxTSPS
 #ofxTSPSReceiver
 ofxOsc
+ofxContourAnalysis
 ofxXmlSettings
 ofxNetwork
 ofxTuioWrapper
