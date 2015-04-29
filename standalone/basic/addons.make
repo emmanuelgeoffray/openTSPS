@@ -15,3 +15,5 @@ ofxContourAnalysis
 ofxXmlSettings
 ofxNetwork
 ofxTuioWrapper
+ofxIpVideoGrabber
+ofxHTTP
