@@ -41,6 +41,10 @@ $ ./clone_addons.sh
 $ sh install_dependencies.sh
 ```
 
+For Ubuntu 14.04 you'll need specific revisions for some libraries:
+
+* ofxLibwebsockets: `a5537dd942d14e4043231ee48e5bf522f852c65c`
+* ofxCv: `165193b84abe7e6dcdd4c442eae990a2d0ea3e96`
 
 * All platforms
   * make sure to keep the "data" folder next to your app if you move it!  
