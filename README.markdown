@@ -35,6 +35,10 @@ Installing:
 
 * Linux
 
+openTSPS works with an obsolete version of oF.
+We've got you covered.
+Check the install_opentsps_from_scratch.sh script.
+
 ``` bash
 $ chmod +x clone_addons.sh
 $ ./clone_addons.sh

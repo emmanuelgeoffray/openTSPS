@@ -11,9 +11,10 @@ ofxSpacebrew
 ofxTSPS
 #ofxTSPSReceiver
 ofxOsc
-ofxContourAnalysis
+#ofxContourAnalysis
 ofxXmlSettings
 ofxNetwork
 ofxTuioWrapper
 ofxIpVideoGrabber
 ofxHTTP
+ofxNetworkUtils
