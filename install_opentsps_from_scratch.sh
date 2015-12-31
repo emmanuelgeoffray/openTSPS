@@ -16,8 +16,6 @@ bash clone_addons.sh
 sudo install_dependencies.sh
 cd ../../../addons/ofxCv/
 git reset --hard ac235ab
-cd ../ofxLibwebsockets/
-git reset --hard 386ec67
 cd ../ofxIpVideoGrabber
 git reset --hard 8f0775dc988175003d0aeb6d3795e6ff94293235
 cd ../ofxHttp
