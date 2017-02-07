@@ -8,7 +8,7 @@ sudo bash install_dependencies.sh
 # make sure it install gstreamer1.0
 # if not, edit the script to force gstreamer1.0 install
 sudo bash install_codecs.sh
-sed -i 's/freetype2\/freetype/freetype2/' ../../../libs/openFrameworks/graphics/ofTrueTypeFont.cpp
+sed -i 's/freetype2\/freetype/freetype/' ../../../libs/openFrameworks/graphics/ofTrueTypeFont.cpp
 cd ../../../apps
 mkdir soixante
 cd soixante
