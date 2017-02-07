@@ -9,6 +9,25 @@ sudo bash install_dependencies.sh
 # if not, edit the script to force gstreamer1.0 install
 sudo bash install_codecs.sh
 sed -i 's/freetype2\/freetype/freetype/' ../../../libs/openFrameworks/graphics/ofTrueTypeFont.cpp
+# try to compile a simple of example
+# cd ../../../examples/video/videoPlayerExample
+# make
+# if you get an error with poco, you may be trying to use poco built with gcc4 and you are using gcc5 or higer
+# try
+# sudo apt-get install g++-4.9 gcc-4.9
+# cd /usr/bin/
+# sudo mv gcc gcc.bkp
+# sudo mv g++ g++.bkp
+# sudo ln -s /usr/bin/gcc-4.9 gcc
+# sudo ln -s /usr/bin/g++-4.9 g++
+# rebuild of
+# cd
+# cd sources/of_v0.8.0_linux64_release/libs/openFrameworksCompiled/project
+# make clean
+# cd
+# cd sources/of_v0.8.0_linux64_release/examples/video/videoPlayerExample/
+# make clean
+# make
 cd ../../../apps
 mkdir soixante
 cd soixante
