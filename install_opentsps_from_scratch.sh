@@ -30,6 +30,8 @@ cd ../ofxMediaType
 git reset --hard 764010240efd30531f4d70c103bad3e6615615ff
 cd ../ofxSSLManager
 git reset --hard 0acbc4bea436b63748781df971f88a3c9a2d4875
+cd ../ofxSpacebrew
+git reset --hard d99b734483de9af0f3b1d7c01670105a9bae544
 cd ../../apps/soixante/openTSPS/standalone/basic
 make
 make run
