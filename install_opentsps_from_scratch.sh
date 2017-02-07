@@ -20,7 +20,7 @@ cd ../../../addons/ofxCv/
 git reset --hard ac235ab
 cd ../ofxIpVideoGrabber
 git reset --hard 8f0775dc988175003d0aeb6d3795e6ff94293235
-cd ../ofxHttp
+cd ../ofxHTTP
 git reset --hard 8a5a51c1d7b0eb7a1a57ac2d6d04531ef27bb9de
 cd ../ofxTaskQueue
 git reset --hard 1a49a08daadbce46f67b4cfe65904eff76d76f06
