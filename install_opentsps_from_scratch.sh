@@ -5,6 +5,8 @@ wget http://www.openframeworks.cc/versions/v0.8.0/of_v0.8.0_linux64_release.tar.
 tar xzvf of_v0.8.0_linux64_release.tar.gz
 cd of_v0.8.0_linux64_release/scripts/linux/ubuntu
 sudo bash install_dependencies.sh
+# make sure it install gstreamer1.0
+# if not, edit the script to force gstreamer1.0 install
 sudo bash install_codecs.sh
 sed -i 's/freetype2\/freetype/freetype2/' ../../../libs/openFrameworks/graphics/ofTrueTypeFont.cpp
 cd ../../../apps
